@@ -1,0 +1,31 @@
+## BHLDir contains dump of BHL texts.
+#
+# BHLDir: /bhlocr/bhl
+
+## LlmUtilURL is the URL to llmutil service
+#
+# LLmUtilURL: 0.0.0.0:8555/api/v1
+
+## DbHost is the host where Postgres is running.
+# 
+# DbHost: 0.0.0.0
+
+## DbUser is the Postgres User.
+#
+# DbUser: postgres
+
+## DbPass is the DbUser's password.
+#
+# DbPass: postgres
+
+## DbBHLQuest is the database where BHLquest keeps its data.
+#
+# DbBHLQuest: bhlquest
+
+## DbBHLNames is the database where BHLnames keeps its data
+#
+# DbBHLNames: bhlnames
+
+## PortRest is the port of for the RESTful API
+#
+# PortRest: 8555

@@ -21,8 +21,17 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/gnames/bhlquest/cmd"
+import (
+	"log/slog"
+	"os"
+
+	"github.com/gnames/bhlquest/cmd"
+)
 
 func main() {
+	handle := slog.NewJSONHandler(os.Stderr, nil)
+	logger := slog.New(handle)
+	slog.SetDefault(logger)
+
 	cmd.Execute()
 }

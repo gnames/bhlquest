@@ -22,26 +22,46 @@ THE SOFTWARE.
 package cmd
 
 import (
+	_ "embed"
 	"os"
 
+	"github.com/gnames/bhlquest/pkg/config"
 	"github.com/spf13/cobra"
 )
 
+//go:embed bhlquest.yaml
+var configText string
 
+var (
+	cfgFile string
+	opts    []config.Option
+)
+
+// fConfig purpose is to achieve automatic import of data from the
+// configuration file, if it exists.
+type fConfig struct {
+	BHLDir     string
+	LlmUtilURL string
+	DbHost     string
+	DbUser     string
+	DbPass     string
+	DbName     string
+	PortREST   int
+}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "bhlquest",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Short: "adds AI capabilities to Biodiversity Heritage Library.",
+	Long:  `Adds AI capabilities to Biodiversity Heritage Library.`,
+	Run: func(cmd *cobra.Command, _ []string) {
+		versionFlag(cmd)
+		flags := []flagFunc{debugFlag}
+		for _, v := range flags {
+			v(cmd)
+		}
+		_ = cmd.Help()
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -54,15 +74,6 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.bhlquest.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.PersistentFlags().BoolP("debug", "d", false, "changes log to debug level")
+	rootCmd.Flags().BoolP("version", "V", false, "show version and build timestamp")
 }
-
-

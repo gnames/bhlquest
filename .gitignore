@@ -24,7 +24,6 @@ _test
 # Dependency directories (e.g., vendor/ for Go modules, or GOPATH)
 /vendor/
 /bin/
-/pkg/
 
 # Editor-specific files and directories
 .vscode/
