@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+
+	"github.com/gnames/bhlquest/pkg/ent/text"
 )
 
 func (e *embedio) init() error {
@@ -36,4 +38,8 @@ CREATE TABLE chunks (
 	}
 	return err
 
+}
+
+func (e *embedio) save(chnks []text.Chunk) error {
+	return nil
 }

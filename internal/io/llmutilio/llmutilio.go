@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gnames/bhlquest/pkg/config"
-	"github.com/gnames/bhlquest/pkg/ent/embed"
 	"github.com/gnames/bhlquest/pkg/ent/llmutil"
+	"github.com/gnames/bhlquest/pkg/ent/text"
 )
 
 type llmutilio struct {
@@ -23,7 +23,7 @@ func New(cfg config.Config) (llmutil.LlmUtil, error) {
 }
 
 func (l *llmutilio) Embed(
-	cnk []embed.Chunk,
-) ([]embed.Chunk, error) {
+	cnk []text.Chunk,
+) ([]text.Chunk, error) {
 	return nil, nil
 }

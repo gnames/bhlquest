@@ -34,7 +34,7 @@ func New(cfg config.Config) (bhln.BHLN, error) {
 func (bn *bhlnio) ItemIds(
 	offset, limit int,
 	taxa []string,
-) ([]int, error) {
+) ([]uint, error) {
 	return bn.dbItems(offset, limit, taxa)
 }
 

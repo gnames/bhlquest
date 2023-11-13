@@ -1,7 +1,7 @@
 package llmutil
 
-import "github.com/gnames/bhlquest/pkg/ent/embed"
+import "github.com/gnames/bhlquest/pkg/ent/text"
 
 type LlmUtil interface {
-	Embed([]embed.Chunk) ([]embed.Chunk, error)
+	Embed([]text.Chunk) ([]text.Chunk, error)
 }

@@ -2,8 +2,12 @@ module github.com/gnames/bhlquest
 
 go 1.21
 
+replace github.com/gnames/gnlib => ../gnlib
+
 require (
+	github.com/gnames/gnlib v0.0.0-00010101000000-000000000000
 	github.com/gnames/gnsys v0.2.3
+	github.com/gnames/gnuuid v0.1.2
 	github.com/jackc/pgx/v5 v5.5.0
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/cobra-cli v1.3.0
@@ -12,6 +16,7 @@ require (
 
 require (
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
+	github.com/google/uuid v1.3.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

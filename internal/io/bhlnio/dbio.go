@@ -5,13 +5,13 @@ import "context"
 func (bn *bhlnio) dbItems(
 	offset, limit int,
 	taxa []string,
-) ([]int, error) {
+) ([]uint, error) {
 	q := `
 SELECT id
   FROM item_stats
-  WHERE main_class in ('Aves')
+  WHERE main_taxon in ('Aves')
 `
-	var res []int
+	var res []uint
 	rows, err := bn.db.Query(context.Background(), q)
 
 	if err != nil {
@@ -19,7 +19,7 @@ SELECT id
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var id int
+		var id uint
 		err = rows.Scan(&id)
 		if err != nil {
 			return nil, err
