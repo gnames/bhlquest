@@ -79,12 +79,13 @@ func OptPortREST(i int) Option {
 func New(opts ...Option) Config {
 	res := Config{
 		BHLDir:     "/opt/bhl/",
-		LlmUtilURL: "http://0.0.0.0:8555/api/v1/",
+		LlmUtilURL: "http://0.0.0.0:8000/api/v1/",
 		DbHost:     "0.0.0.0",
 		DbUser:     "postgres",
 		DbPass:     "postgres",
 		DbBHLQuest: "bhlquest",
 		DbBHLNames: "bhlnames",
+		PortREST:   8555,
 	}
 	for _, opt := range opts {
 		opt(&res)

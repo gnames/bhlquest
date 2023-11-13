@@ -80,6 +80,8 @@ func Execute() {
 }
 
 func init() {
+	cobra.OnInitialize(initConfig)
+
 	rootCmd.PersistentFlags().BoolP("debug", "d", false, "changes log to debug level")
 	rootCmd.Flags().BoolP("version", "V", false, "show version and build timestamp")
 }
@@ -115,7 +117,7 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		msg := fmt.Sprintf("Using config file: %s.", viper.ConfigFileUsed())
+		msg := fmt.Sprintf("Using config file %s.", viper.ConfigFileUsed())
 		slog.Info(msg)
 	}
 
@@ -128,7 +130,7 @@ func getOpts() {
 	cfgCli := &configData{}
 	err := viper.Unmarshal(cfgCli)
 	if err != nil {
-		msg := fmt.Sprintf("Cannot deserialize config file: %w", err)
+		msg := fmt.Sprintf("Cannot deserialize config file: %s", err)
 		slog.Error(msg)
 		os.Exit(1)
 	}
@@ -160,28 +162,31 @@ func getOpts() {
 }
 
 // touchConfigFile checks if config file exists, and if not, it gets created.
-func touchConfigFile(configPath string) {
-	if ok, err := gnsys.FileExists(configPath); ok && err == nil {
-		return
+func touchConfigFile(configPath string) error {
+	exists, err := gnsys.FileExists(configPath)
+	if exists || err != nil {
+		return err
 	}
 
 	msg := fmt.Sprintf("Creating config file '%s'", configPath)
 	slog.Info(msg)
 	createConfig(configPath)
+	return nil
 }
 
 // createConfig creates config file.
 func createConfig(path string) {
 	err := gnsys.MakeDir(filepath.Dir(path))
 	if err != nil {
-		msg := fmt.Sprintf("Cannot create dir %s: %w", path, err)
+		msg := fmt.Sprintf("Cannot create dir %s: %s", path, err)
 		slog.Error(msg)
 		os.Exit(1)
 	}
 
 	err = os.WriteFile(path, []byte(configText), 0644)
 	if err != nil {
-		msg := fmt.Sprintf("Cannot write to file %s: %w", path, err)
+		msg := fmt.Sprintf("Cannot write to file %s: %s", path, err)
 		slog.Error(msg)
+		os.Exit(1)
 	}
 }

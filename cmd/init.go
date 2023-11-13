@@ -28,6 +28,7 @@ import (
 
 	"github.com/gnames/bhlquest/internal/io/bhlnio"
 	"github.com/gnames/bhlquest/internal/io/embedio"
+	"github.com/gnames/bhlquest/internal/io/llmutilio"
 	bhlquest "github.com/gnames/bhlquest/pkg"
 	"github.com/gnames/bhlquest/pkg/config"
 	"github.com/spf13/cobra"
@@ -46,6 +47,7 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg := config.New(opts...)
 		fmt.Printf("CFG: %#v\n\n", cfg)
+
 		bn, err := bhlnio.New(cfg)
 		if err != nil {
 			msg := fmt.Sprintf("Init of BHLNames failed: %s", err)
@@ -60,7 +62,14 @@ to quickly create a Cobra application.`,
 			os.Exit(1)
 		}
 
-		bq := bhlquest.New(cfg, bn, emb)
+		llm, err := llmutilio.New(cfg)
+		if err != nil {
+			msg := fmt.Sprintf("Init of BHLNames failed: %s", err)
+			slog.Error(msg)
+			os.Exit(1)
+		}
+
+		bq := bhlquest.New(cfg, bn, emb, llm)
 		err = bq.Init()
 		if err != nil {
 			msg := fmt.Sprintf("Init failed: %s", err)

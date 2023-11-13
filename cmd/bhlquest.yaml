@@ -1,10 +1,10 @@
 ## BHLDir contains dump of BHL texts.
 #
-# BHLDir: /bhlocr/bhl
+# BHLDir: /opt/bhl
 
 ## LlmUtilURL is the URL to llmutil service
 #
-# LLmUtilURL: 0.0.0.0:8555/api/v1
+# LlmUtilURL: http://0.0.0.0:8000/api/v1
 
 ## DbHost is the host where Postgres is running.
 # 
