@@ -23,10 +23,15 @@ package cmd
 
 import (
 	_ "embed"
+	"fmt"
+	"log/slog"
 	"os"
+	"path/filepath"
 
 	"github.com/gnames/bhlquest/pkg/config"
+	"github.com/gnames/gnsys"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 //go:embed bhlquest.yaml
@@ -39,13 +44,14 @@ var (
 
 // fConfig purpose is to achieve automatic import of data from the
 // configuration file, if it exists.
-type fConfig struct {
+type configData struct {
 	BHLDir     string
 	LlmUtilURL string
 	DbHost     string
 	DbUser     string
 	DbPass     string
-	DbName     string
+	DbBHLQuest string
+	DbBHLNames string
 	PortREST   int
 }
 
@@ -76,4 +82,106 @@ func Execute() {
 func init() {
 	rootCmd.PersistentFlags().BoolP("debug", "d", false, "changes log to debug level")
 	rootCmd.Flags().BoolP("version", "V", false, "show version and build timestamp")
+}
+
+// initConfig reads in config file and ENV variables if set.
+func initConfig() {
+	var configDir string
+	var err error
+	configFile := "bhlquest"
+	home, err := os.UserHomeDir()
+	if err != nil {
+		slog.Error(err.Error())
+		os.Exit(1)
+	}
+	configDir = filepath.Join(home, ".config")
+
+	// Search config in home directory with name ".gnmatcher" (without extension).
+	viper.AddConfigPath(configDir)
+	viper.SetConfigName(configFile)
+
+	_ = viper.BindEnv("BHLDir", "BHLQ_BHL_DIR")
+	_ = viper.BindEnv("LlmUtilURL", "BHLQ_LLM_UTIL_URL")
+	_ = viper.BindEnv("DbHost", "BHLQ_DB_HOST")
+	_ = viper.BindEnv("DbUser", "BHLQ_DB_USER")
+	_ = viper.BindEnv("DbPass", "BHLQ_DB_PASS")
+	_ = viper.BindEnv("DbBHLQuest", "BHLQ_DB_BHL_QUEST")
+	_ = viper.BindEnv("DbBHLNames", "BHLQ_DB_BHL_NAMES")
+
+	viper.AutomaticEnv() // read in environment variables that match
+
+	configPath := filepath.Join(configDir, fmt.Sprintf("%s.yaml", configFile))
+	touchConfigFile(configPath)
+
+	// If a config file is found, read it in.
+	if err := viper.ReadInConfig(); err == nil {
+		msg := fmt.Sprintf("Using config file: %s.", viper.ConfigFileUsed())
+		slog.Info(msg)
+	}
+
+	getOpts()
+}
+
+// getOpts imports data from the configuration file. Some of the settings can
+// be overriden by command line flags.
+func getOpts() {
+	cfgCli := &configData{}
+	err := viper.Unmarshal(cfgCli)
+	if err != nil {
+		msg := fmt.Sprintf("Cannot deserialize config file: %w", err)
+		slog.Error(msg)
+		os.Exit(1)
+	}
+
+	if cfgCli.BHLDir != "" {
+		opts = append(opts, config.OptBHLDir(cfgCli.BHLDir))
+	}
+	if cfgCli.LlmUtilURL != "" {
+		opts = append(opts, config.OptLlmUtilURL(cfgCli.LlmUtilURL))
+	}
+	if cfgCli.DbHost != "" {
+		opts = append(opts, config.OptDbHost(cfgCli.DbHost))
+	}
+	if cfgCli.DbUser != "" {
+		opts = append(opts, config.OptDbUser(cfgCli.DbUser))
+	}
+	if cfgCli.DbPass != "" {
+		opts = append(opts, config.OptDbPass(cfgCli.DbPass))
+	}
+	if cfgCli.DbBHLQuest != "" {
+		opts = append(opts, config.OptDbBHLQuest(cfgCli.DbBHLQuest))
+	}
+	if cfgCli.DbBHLNames != "" {
+		opts = append(opts, config.OptDbBHLNames(cfgCli.DbBHLNames))
+	}
+	if cfgCli.PortREST != 0 {
+		opts = append(opts, config.OptPortREST(cfgCli.PortREST))
+	}
+}
+
+// touchConfigFile checks if config file exists, and if not, it gets created.
+func touchConfigFile(configPath string) {
+	if ok, err := gnsys.FileExists(configPath); ok && err == nil {
+		return
+	}
+
+	msg := fmt.Sprintf("Creating config file '%s'", configPath)
+	slog.Info(msg)
+	createConfig(configPath)
+}
+
+// createConfig creates config file.
+func createConfig(path string) {
+	err := gnsys.MakeDir(filepath.Dir(path))
+	if err != nil {
+		msg := fmt.Sprintf("Cannot create dir %s: %w", path, err)
+		slog.Error(msg)
+		os.Exit(1)
+	}
+
+	err = os.WriteFile(path, []byte(configText), 0644)
+	if err != nil {
+		msg := fmt.Sprintf("Cannot write to file %s: %w", path, err)
+		slog.Error(msg)
+	}
 }
