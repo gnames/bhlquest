@@ -27,6 +27,7 @@ import (
 	"os"
 
 	"github.com/gnames/bhlquest/internal/io/bhlnio"
+	"github.com/gnames/bhlquest/internal/io/embedio"
 	bhlquest "github.com/gnames/bhlquest/pkg"
 	"github.com/gnames/bhlquest/pkg/config"
 	"github.com/spf13/cobra"
@@ -51,7 +52,15 @@ to quickly create a Cobra application.`,
 			slog.Error(msg)
 			os.Exit(1)
 		}
-		bq := bhlquest.New(cfg, bn)
+
+		emb, err := embedio.New(cfg)
+		if err != nil {
+			msg := fmt.Sprintf("Init of BHLNames failed: %s", err)
+			slog.Error(msg)
+			os.Exit(1)
+		}
+
+		bq := bhlquest.New(cfg, bn, emb)
 		err = bq.Init()
 		if err != nil {
 			msg := fmt.Sprintf("Init failed: %s", err)

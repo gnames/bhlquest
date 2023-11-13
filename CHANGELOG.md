@@ -5,8 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### Added v0.0.1
 
+- Create database reset with pgvector for the data (#3)
 - Return list of item ids (#2)
 
 
