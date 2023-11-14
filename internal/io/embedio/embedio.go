@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"strconv"
 	"sync"
 
 	"github.com/gnames/bhlquest/internal/io/dbshare"
@@ -56,14 +57,20 @@ func (e *embedio) Init() error {
 func (e *embedio) Populate(itemIDs []uint) error {
 	chIn := make(chan []text.Chunk)
 	chOut := make(chan []text.Chunk)
-	var wg sync.WaitGroup
+	var wg, saveWg sync.WaitGroup
 	wg.Add(1)
+	saveWg.Add(1)
 
 	go e.embedStream(chIn, chOut, &wg)
-	go e.saveStream(chOut)
+	go e.saveStream(chOut, &saveWg)
 
 	e.loadChunks(chIn, itemIDs)
+
 	wg.Wait()
+	close(chOut)
+
+	saveWg.Wait()
+
 	return nil
 }
 
@@ -83,8 +90,13 @@ func (e *embedio) embedStream(
 	}
 }
 
-func (e *embedio) saveStream(chOut <-chan []text.Chunk) {
+func (e *embedio) saveStream(chOut <-chan []text.Chunk, saveWg *sync.WaitGroup) {
+	defer saveWg.Done()
+	var count int
 	for ch := range chOut {
+		count++
+		slog.Info(strconv.Itoa(count))
+		e.save(ch)
 		_ = ch
 	}
 }

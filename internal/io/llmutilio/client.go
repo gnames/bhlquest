@@ -1,6 +1,7 @@
 package llmutilio
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -17,7 +18,7 @@ func (l *llmutilio) conn() error {
 	l.url = url
 	tr := &http.Transport{
 		MaxIdleConns:    10,
-		IdleConnTimeout: 30 * time.Second,
+		IdleConnTimeout: 300 * time.Second,
 	}
 	client := &http.Client{Timeout: 4 * time.Minute, Transport: tr}
 	l.client = client
@@ -55,4 +56,41 @@ func (l *llmutilio) ping() error {
 	}
 
 	return nil
+}
+
+func (l *llmutilio) embed(texts []string) ([][]float32, error) {
+	ctx := context.Background()
+	url := fmt.Sprintf("%sembed", l.url)
+	bs, err := l.enc.Encode(embedPayload{Texts: texts})
+	if err != nil {
+		return nil, err
+	}
+	pld := bytes.NewReader(bs)
+	request, err := http.NewRequestWithContext(ctx, http.MethodPost, url, pld)
+	if err != nil {
+		err = fmt.Errorf("cannot create embed request: %w", err)
+		return nil, err
+	}
+	request.Header.Set("Content-Type", "application/json")
+
+	resp, err := l.client.Do(request)
+	if err != nil {
+		err = fmt.Errorf("cannot get embed response: %w", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	bs, err = io.ReadAll(resp.Body)
+	if err != nil {
+		err = fmt.Errorf("cannot read embed body: %w", err)
+		return nil, err
+	}
+	var res [][]float32
+	err = l.enc.Decode(bs, &res)
+	if err != nil {
+		err = fmt.Errorf("cannot decode embed body: %w", err)
+		return nil, err
+	}
+
+	return res, nil
 }

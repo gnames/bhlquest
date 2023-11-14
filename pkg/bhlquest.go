@@ -7,23 +7,17 @@ import (
 	"github.com/gnames/bhlquest/pkg/config"
 	"github.com/gnames/bhlquest/pkg/ent/bhln"
 	"github.com/gnames/bhlquest/pkg/ent/embed"
-	"github.com/gnames/bhlquest/pkg/ent/llmutil"
-	"github.com/gnames/bhlquest/pkg/ent/storage"
 )
 
 type Components struct {
 	BHLNames bhln.BHLN
 	Embed    embed.Embed
-	LlmUtil  llmutil.LlmUtil
-	Storage  storage.Storage
 }
 
 type bhlquest struct {
 	cfg  config.Config
 	bhln bhln.BHLN
 	emb  embed.Embed
-	llm  llmutil.LlmUtil
-	stg  storage.Storage
 }
 
 func New(
@@ -34,8 +28,6 @@ func New(
 		cfg:  cfg,
 		bhln: cmp.BHLNames,
 		emb:  cmp.Embed,
-		llm:  cmp.LlmUtil,
-		stg:  cmp.Storage,
 	}
 
 	return res
@@ -49,6 +41,9 @@ func (bq bhlquest) Init() error {
 		return err
 	}
 
+	msg := fmt.Sprintf("Found %d items.", len(ids))
+	slog.Info(msg)
+
 	slog.Info("Initiate BHLquest database.")
 	err = bq.emb.Init()
 	if err != nil {
@@ -56,7 +51,7 @@ func (bq bhlquest) Init() error {
 	}
 
 	slog.Info("Find Items' texts and prepare them for AI.")
-	err = bq.emb.Populate(ids[0:10])
+	err = bq.emb.Populate(ids[0:1000])
 	if err != nil {
 		return err
 	}

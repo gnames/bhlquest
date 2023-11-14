@@ -6,6 +6,7 @@ import (
 	"log/slog"
 
 	"github.com/gnames/bhlquest/pkg/ent/text"
+	pgvector "github.com/pgvector/pgvector-go"
 )
 
 func (e *embedio) init() error {
@@ -26,9 +27,9 @@ COMMENT ON SCHEMA public IS 'standard public schema'`
 	q = `
 CREATE TABLE chunks (
 	id bigserial PRIMARY KEY,
-	title_id int,
-	page_id int,
-	uuid uuid,
+	item_id int,
+	page_id bigint,
+	page_id_end bigint,
 	embedding vector(384)
 	)		
 	`
@@ -40,6 +41,22 @@ CREATE TABLE chunks (
 
 }
 
-func (e *embedio) save(chnks []text.Chunk) error {
+func (e *embedio) save(chunks []text.Chunk) error {
+	cxt := context.Background()
+	q := `INSERT INTO chunks
+		(item_id, page_id, page_id_end, embedding)
+		VALUES ($1, $2, $3, $4)`
+	for _, v := range chunks {
+		pIDs := v.PageIDs
+		l := len(pIDs)
+		if l == 0 {
+			continue
+		}
+		vec := pgvector.NewVector(v.Embedding)
+		_, err := e.db.Exec(cxt, q, v.ItemID, pIDs[0], pIDs[l-1], vec)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
