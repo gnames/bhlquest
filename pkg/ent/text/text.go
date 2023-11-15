@@ -23,6 +23,7 @@ type Chunk struct {
 	UUID      string
 	Text      string
 	Embedding []float32
+	Distance  float64
 }
 
 type text struct {

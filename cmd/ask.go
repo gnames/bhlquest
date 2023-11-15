@@ -26,27 +26,45 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/gnames/gnfmt"
 	"github.com/spf13/cobra"
 )
 
-// initCmd represents the init command
-var initCmd = &cobra.Command{
-	Use:   "init",
-	Short: "Makes database, embeds BHL items and saves them.",
-	Long:  `Makes database, embeds BHL items and saves them.`,
+// askCmd represents the ask command
+var askCmd = &cobra.Command{
+	Use:   "ask",
+	Short: "Allows to ask questions about BHL content.",
+	Long:  `Allows to ask questions about BHL content.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		bq := bhlquestFactory()
-		err := bq.Init()
-		if err != nil {
-			msg := fmt.Sprintf("Init failed: %s", err)
-			slog.Error(msg)
+		if len(args) == 0 {
+			slog.Error("No question is given.")
 			os.Exit(1)
 		}
 
-		slog.Info("Init finished")
+		bq := bhlquestFactory()
+		q := args[0]
+		answer, err := bq.Ask(q)
+		if err != nil {
+			msg := fmt.Sprintf("Cannot get reply: %s", err)
+			slog.Error(msg)
+			os.Exit(1)
+		}
+		enc := gnfmt.GNjson{}
+		out, _ := enc.Encode(answer)
+		fmt.Println(string(out))
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(initCmd)
+	rootCmd.AddCommand(askCmd)
+
+	// Here you will define your flags and configuration settings.
+
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// askCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// askCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

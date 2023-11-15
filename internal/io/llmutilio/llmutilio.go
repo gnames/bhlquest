@@ -47,3 +47,7 @@ func (l *llmutilio) Embed(
 	}
 	return res, nil
 }
+
+func (l *llmutilio) EmbedTexts(texts []string) ([][]float32, error) {
+	return l.embed(texts)
+}

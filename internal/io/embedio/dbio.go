@@ -60,3 +60,35 @@ func (e *embedio) save(chunks []text.Chunk) error {
 	}
 	return nil
 }
+
+func (e *embedio) query(emb []float32) ([]text.Chunk, error) {
+	ctx := context.Background()
+	rows, err := e.db.Query(ctx, "SELECT id, item_id, page_id, page_id_end, embedding <=> $1 as dot FROM chunks ORDER BY dot LIMIT 5", pgvector.NewVector(emb))
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	var res []text.Chunk
+	for rows.Next() {
+		var ch text.Chunk
+		var start, end int
+		var dotProd float64
+		err = rows.Scan(&ch.ID, &ch.ItemID, &start, &end, &dotProd)
+		if err != nil {
+			panic(err)
+		}
+		ch.PageIDs = append(ch.PageIDs, uint(start))
+		if start != end {
+			ch.PageIDs = append(ch.PageIDs, uint(end))
+		}
+		ch.Distance = dotProd
+		res = append(res, ch)
+	}
+
+	if rows.Err() != nil {
+		panic(rows.Err())
+	}
+
+	return res, nil
+}

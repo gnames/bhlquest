@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added v0.0.1
 
+- Ask a question and get an answer (#7).
 - Embed chunks and save to the database (#6).
 - Break items into chunks (#5).
 - Connect to llmutil RESTful service (#4).

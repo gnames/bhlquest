@@ -10,6 +10,7 @@ import (
 
 	"github.com/gnames/bhlquest/internal/io/dbshare"
 	"github.com/gnames/bhlquest/pkg/config"
+	"github.com/gnames/bhlquest/pkg/ent/answer"
 	"github.com/gnames/bhlquest/pkg/ent/embed"
 	"github.com/gnames/bhlquest/pkg/ent/llmutil"
 	"github.com/gnames/bhlquest/pkg/ent/storage"
@@ -72,6 +73,36 @@ func (e *embedio) Populate(itemIDs []uint) error {
 	saveWg.Wait()
 
 	return nil
+}
+
+func (e *embedio) Embed(texts []string) ([][]float32, error) {
+	return e.llm.EmbedTexts(texts)
+}
+
+func (e *embedio) Query(emb []float32) (answer.Answer, error) {
+	var res answer.Answer
+	chs, err := e.query(emb)
+	if err != nil {
+		return res, err
+	}
+	var data []answer.Result
+	for i := range chs {
+		l := len(chs[i].PageIDs)
+		d := answer.Result{
+			ItemID:      chs[i].ItemID,
+			PageIDStart: chs[i].PageIDs[0],
+			PageIDEnd:   chs[i].PageIDs[l-1],
+			Score:       1 - chs[i].Distance,
+			Outlink: fmt.Sprintf(
+				"%s%d",
+				"https://www.biodiversitylibrary.org/page/",
+				chs[i].PageIDs[0],
+			),
+		}
+		data = append(data, d)
+	}
+	res.Results = data
+	return res, nil
 }
 
 func (e *embedio) embedStream(

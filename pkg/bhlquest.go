@@ -1,10 +1,13 @@
 package bhlquest
 
 import (
+	"errors"
 	"fmt"
 	"log/slog"
+	"time"
 
 	"github.com/gnames/bhlquest/pkg/config"
+	"github.com/gnames/bhlquest/pkg/ent/answer"
 	"github.com/gnames/bhlquest/pkg/ent/bhln"
 	"github.com/gnames/bhlquest/pkg/ent/embed"
 )
@@ -51,13 +54,33 @@ func (bq bhlquest) Init() error {
 	}
 
 	slog.Info("Find Items' texts and prepare them for AI.")
-	err = bq.emb.Populate(ids[0:1000])
+	err = bq.emb.Populate(ids)
 	if err != nil {
 		return err
 	}
 
 	slog.Info("Initial processing finished without errors.")
 	return nil
+}
+
+func (bq bhlquest) Ask(q string) (answer.Answer, error) {
+	start := time.Now()
+	var res answer.Answer
+	emb, err := bq.emb.Embed([]string{q})
+	if err != nil {
+		return res, err
+	}
+	if len(emb) < 1 {
+		err := errors.New("embedding of the question failed")
+		return res, err
+	}
+	res, err = bq.emb.Query(emb[0])
+	if err != nil {
+		return res, err
+	}
+	duration := time.Since(start).Seconds()
+	res.Meta.QueryTime = duration
+	return res, nil
 }
 
 // GetVersion provides version information of the app.
