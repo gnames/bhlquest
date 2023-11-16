@@ -30,6 +30,7 @@ CREATE TABLE chunks (
 	item_id int,
 	page_id bigint,
 	page_id_end bigint,
+	item_offset int,
 	embedding vector(384)
 	)		
 	`
@@ -44,8 +45,8 @@ CREATE TABLE chunks (
 func (e *embedio) save(chunks []text.Chunk) error {
 	cxt := context.Background()
 	q := `INSERT INTO chunks
-		(item_id, page_id, page_id_end, embedding)
-		VALUES ($1, $2, $3, $4)`
+		(item_id, page_id, page_id_end, item_offset, embedding)
+		VALUES ($1, $2, $3, $4, $5)`
 	for _, v := range chunks {
 		pIDs := v.PageIDs
 		l := len(pIDs)
@@ -53,7 +54,7 @@ func (e *embedio) save(chunks []text.Chunk) error {
 			continue
 		}
 		vec := pgvector.NewVector(v.Embedding)
-		_, err := e.db.Exec(cxt, q, v.ItemID, pIDs[0], pIDs[l-1], vec)
+		_, err := e.db.Exec(cxt, q, v.ItemID, pIDs[0], pIDs[l-1], v.Start, vec)
 		if err != nil {
 			return err
 		}
@@ -63,7 +64,7 @@ func (e *embedio) save(chunks []text.Chunk) error {
 
 func (e *embedio) query(emb []float32) ([]text.Chunk, error) {
 	ctx := context.Background()
-	rows, err := e.db.Query(ctx, "SELECT id, item_id, page_id, page_id_end, embedding <=> $1 as dot FROM chunks ORDER BY dot LIMIT 5", pgvector.NewVector(emb))
+	rows, err := e.db.Query(ctx, "SELECT id, item_id, page_id, page_id_end, item_offset, embedding <=> $1 as dot FROM chunks ORDER BY dot LIMIT 5", pgvector.NewVector(emb))
 	if err != nil {
 		panic(err)
 	}
@@ -74,7 +75,7 @@ func (e *embedio) query(emb []float32) ([]text.Chunk, error) {
 		var ch text.Chunk
 		var start, end int
 		var dotProd float64
-		err = rows.Scan(&ch.ID, &ch.ItemID, &start, &end, &dotProd)
+		err = rows.Scan(&ch.ID, &ch.ItemID, &start, &end, &ch.Start, &dotProd)
 		if err != nil {
 			panic(err)
 		}

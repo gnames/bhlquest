@@ -96,6 +96,18 @@ swag init -g server.go -d ./internal/io/web
 
 Run the same command every time docs are updated.
 
+### Genaration of a client for a particular language
+
+You can install openapi-generator to create an API client for a specific
+language. For example, for Ruby, run the following command from the project's
+root:
+
+```bash
+openapi-generator generate -i ./docs/swagger.yaml -g ruby -o ~/tmp/bhlquest --additional-properties gemName=bhlquest
+```
+
+
+[Biodiversity Heritage Library]: https://www.biodiversitylibrary.org/
 [llmutil documentation]: https://github.com/gnames/llmutil
 [pgvector extension]: https://github.com/pgvector/pgvector
 [bhlnames database dump]: http://opendata.globalnames.org/dumps/bhlnames-2023-11-15.zst 

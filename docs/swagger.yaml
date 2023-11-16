@@ -57,6 +57,10 @@ definitions:
           the result. Higher scores are better.
         example: 0.7505834773704542
         type: number
+      text:optional:
+        description: Text respresents the actual string that was used for matching
+          by AI.
+        type: string
     type: object
   gnvers.Version:
     description: Version provides information about the version of an application.

@@ -50,6 +50,23 @@ func (t *text) TextToChunks(itemID uint) ([]Chunk, error) {
 	return t.pagesToChunks(pages), nil
 }
 
+func (t *text) ChunkText(cnk Chunk) string {
+	pages, err := t.stg.Pages(cnk.ItemID)
+	if err != nil {
+		return ""
+	}
+	txt := combinePages(pages)
+	offset := int(cnk.Start)
+	if len(txt) <= offset {
+		return ""
+	}
+	res := txt[offset:]
+	if len(res) < 1000 {
+		return res
+	}
+	return res[:1000]
+}
+
 func (t *text) pagesToChunks(pages []storage.Page) []Chunk {
 	txt := combinePages(pages)
 	chunks := splitOverlap(pages[0].ItemID, txt, 1000, 100)
