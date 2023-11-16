@@ -26,6 +26,6 @@
 #
 # DbBHLNames: bhlnames
 
-## PortRest is the port of for the RESTful API
+## Port is the port of for the RESTful API
 #
-# PortRest: 8555
+# Port: 8555

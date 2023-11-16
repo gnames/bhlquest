@@ -157,7 +157,7 @@ func getOpts() {
 		opts = append(opts, config.OptDbBHLNames(cfgCli.DbBHLNames))
 	}
 	if cfgCli.PortREST != 0 {
-		opts = append(opts, config.OptPortREST(cfgCli.PortREST))
+		opts = append(opts, config.OptPort(cfgCli.PortREST))
 	}
 }
 

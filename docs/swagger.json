@@ -1,0 +1,190 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is API to BHLQuest app. It finds places in Biodiversity Heritage Library that correspond to an asked question. \\n\\nCode: https://github.com/gnames/bhlquest. \\n\\nProduction server: https://bhlquest.globalnames.org/api/v1",
+        "title": "BHLQuest API",
+        "contact": {
+            "name": "Dmitry Mozzherin",
+            "url": "https://github.com/dimus",
+            "email": "dmozzherin@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8555",
+    "basePath": "/api/v1",
+    "paths": {
+        "/": {
+            "get": {
+                "description": "Gives information where to find docs.",
+                "produces": [
+                    "text/plain"
+                ],
+                "summary": "Information about the API documentation",
+                "operationId": "get-info",
+                "responses": {
+                    "200": {
+                        "description": "API documentation URL",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/ask/{question}": {
+            "get": {
+                "description": "This endpoint receives a question about BHL and returns a list of pages containing the answer.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Ask a question",
+                "operationId": "ask-question",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "A question to ask BHL about.",
+                        "name": "question",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of pages containing the answer",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/answer.Answer"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ping": {
+            "get": {
+                "description": "Checks if the API is online and returns a simple response if it is.",
+                "produces": [
+                    "text/plain"
+                ],
+                "summary": "Check API status",
+                "operationId": "get-ping",
+                "responses": {
+                    "200": {
+                        "description": "API status response",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/version": {
+            "get": {
+                "description": "Retrieves the current version of the BHLQuest application.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get BHLQuest version",
+                "operationId": "get-version",
+                "responses": {
+                    "200": {
+                        "description": "Successful response with version information",
+                        "schema": {
+                            "$ref": "#/definitions/gnvers.Version"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "answer.Answer": {
+            "description": "Answer holds the metadata and results for a query response, containing the pages from BHL that answer a given question.",
+            "type": "object",
+            "properties": {
+                "metadata": {
+                    "description": "Meta contains metadata about the request.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/answer.Meta"
+                        }
+                    ]
+                },
+                "results": {
+                    "description": "Results is a list of pages containing the answers.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/answer.Result"
+                    }
+                }
+            }
+        },
+        "answer.Meta": {
+            "description": "Meta includes information such as the time taken to process the query.",
+            "type": "object",
+            "properties": {
+                "queryTime": {
+                    "description": "QueryTime is the duration taken to process the query.",
+                    "type": "number",
+                    "example": 0.911422974
+                },
+                "question": {
+                    "type": "string",
+                    "example": "What are ecological niches for Indigo Bunting?"
+                }
+            }
+        },
+        "answer.Result": {
+            "description": "Result holds information about a BHL page or range of pages that contain answers to a given question.",
+            "type": "object",
+            "properties": {
+                "itemId": {
+                    "description": "ItemID is the ID of a BHL Item, such as a book\nor journal volume.",
+                    "type": "integer",
+                    "example": 226148
+                },
+                "outlink": {
+                    "description": "Outlink is the URL pointing to the BHL website\nfor PageIDStart.",
+                    "type": "string",
+                    "example": "https://www.biodiversitylibrary.org/page/53469262"
+                },
+                "pageEnd": {
+                    "description": "PageIDEnd is the ID of the ending page of the answer.\nIt's the same as PageIDStart if the answer is on one page.",
+                    "type": "integer",
+                    "example": 53469262
+                },
+                "pageStart": {
+                    "description": "PageIDStart is the ID of the starting page of the answer.",
+                    "type": "integer",
+                    "example": 53469262
+                },
+                "score": {
+                    "description": "Score, generated by AI, indicates the relevance of\nthe result. Higher scores are better.",
+                    "type": "number",
+                    "example": 0.7505834773704542
+                }
+            }
+        },
+        "gnvers.Version": {
+            "description": "Version provides information about the version of an application.",
+            "type": "object",
+            "properties": {
+                "build": {
+                    "description": "Build contains the timestamp or other details\nindicating when the app was compiled.",
+                    "type": "string",
+                    "example": "2023-08-03_18:58:38UTC"
+                },
+                "version": {
+                    "description": "Version specifies the version of the app, usually in the v0.0.0 format.",
+                    "type": "string",
+                    "example": "v1.0.2"
+                }
+            }
+        }
+    }
+}

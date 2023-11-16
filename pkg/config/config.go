@@ -22,8 +22,11 @@ type Config struct {
 	// DbBHLNames is the database where BHLnames keeps its data.
 	DbBHLNames string
 
-	// PortREST is the port where to run the RESTful service.
-	PortREST int
+	// Port is the port where to run the RESTful service.
+	Port int
+
+	// APIDocURL is the url to the API documentation.
+	APIDocURL string
 }
 
 type Option func(*Config)
@@ -70,9 +73,9 @@ func OptDbBHLNames(s string) Option {
 	}
 }
 
-func OptPortREST(i int) Option {
+func OptPort(i int) Option {
 	return func(cfg *Config) {
-		cfg.PortREST = i
+		cfg.Port = i
 	}
 }
 
@@ -85,7 +88,8 @@ func New(opts ...Option) Config {
 		DbPass:     "postgres",
 		DbBHLQuest: "bhlquest",
 		DbBHLNames: "bhlnames",
-		PortREST:   8555,
+		Port:       8555,
+		APIDocURL:  "https://apidoc.globalnames.org/bhlquest",
 	}
 	for _, opt := range opts {
 		opt(&res)

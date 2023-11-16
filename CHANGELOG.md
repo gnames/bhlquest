@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added v0.0.1
 
+- Create API endpoint (close #8).
 - Ask a question and get an answer (#7).
 - Embed chunks and save to the database (#6).
 - Break items into chunks (#5).
@@ -25,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 This document follows [changelog guidelines]
 
+[v0.0.1]: https://github.com/gnames/bhlquest/compare/v0.0.0...v0.0.1
 [v0.0.0]: https://github.com/gnames/bhlquest/tree/v0.0.0
 
 [#12]: https://codeberg.org/dimus/madcow/issues/12

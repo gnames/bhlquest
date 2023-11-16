@@ -10,6 +10,7 @@ import (
 	"github.com/gnames/bhlquest/pkg/ent/answer"
 	"github.com/gnames/bhlquest/pkg/ent/bhln"
 	"github.com/gnames/bhlquest/pkg/ent/embed"
+	"github.com/gnames/gnlib/ent/gnvers"
 )
 
 type Components struct {
@@ -79,12 +80,20 @@ func (bq bhlquest) Ask(q string) (answer.Answer, error) {
 		return res, err
 	}
 	duration := time.Since(start).Seconds()
+	res.Meta.Question = q
 	res.Meta.QueryTime = duration
 	return res, nil
 }
 
+func (bq bhlquest) GetConfig() config.Config {
+	return bq.cfg
+}
+
 // GetVersion provides version information of the app.
-func GetVersion() string {
-	version := fmt.Sprintf("Version: %s\nBuild:   %s", Version, Build)
+func GetVersion() gnvers.Version {
+	version := gnvers.Version{
+		Version: Version,
+		Build:   Build,
+	}
 	return version
 }

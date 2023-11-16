@@ -5,8 +5,8 @@ VER = $(shell git describe --tags --abbrev=0)
 DATE = $(shell TZ=UTC date +'%Y-%m-%d_%H:%M:%ST%Z')
 
 NO_C = CGO_ENABLED=0
-FLAGS_LD = -ldflags "-X codeberg.org/dimus/$(PROJ_NAME)/pkg.Build=$(DATE) \
-                     -X codeberg.org/dimus/$(PROJ_NAME)/pkg.Version=$(VERSION)"
+FLAGS_LD = -ldflags "-X github.com/gnames/$(PROJ_NAME)/pkg.Build=$(DATE) \
+                     -X github.com/gnames/$(PROJ_NAME)/pkg.Version=$(VERSION)"
 FLAGS_REL = -trimpath -ldflags "-s -w -X codeberg.org/dimus/$(PROJ_NAME)/pkg.Build=$(DATE)"
 FLAGS_SHARED = $(NO_C) GOARCH=amd64
 
@@ -39,25 +39,25 @@ tools: deps ## Install tools
 	@cat tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % go install %
 
 ## Build:
-build: ## Build binary
+build: openapi ## Build binary
 	$(NO_C) $(GOCMD) build \
 		-o $(PROJ_NAME) \
 		$(FLAGS_LD) \
 		.
 
 ## Build Release
-buildrel: ## Build binary without debug info and with hardcoded version
+buildrel: openapi ## Build binary without debug info and with hardcoded version
 	$(NO_C) $(GOCMD) build \
 		-o $(PROJ_NAME) \
 		$(FLAGS_REL) \
 		.
 
 ## Install:
-install: ## Build and install binary
+install: openapi ## Build and install binary
 	$(NO_C) $(GOINSTALL)
 
 ## Release
-release: buildrel ## Build and package binaries for a release
+release: openapi buildrel ## Build and package binaries for a release
 	$(GOCLEAN); \
 	$(FLAGS_SHARED) GOOS=linux $(GORELEASE); \
 	tar zcvf $(RELEASE_DIR)/$(PROJ_NAME)-$(VER)-linux.tar.gz $(PROJ_NAME); \
@@ -75,6 +75,10 @@ test: ## Run the tests of the project
 coverage: ## Run the tests of the project and export the coverage
 	$(GOTEST) -cover -covermode=count -coverprofile=profile.cov ./...
 	$(GOCMD) tool cover -func profile.cov
+
+## OpenAPI generation
+openapi: ## Generate documentation for OpenAPI
+	swag init -g server.go -d ./internal/io/web  --parseDependency --parseInternal
 
 ## Help:
 help: ## Show this help
