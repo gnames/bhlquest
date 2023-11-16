@@ -27,6 +27,12 @@ type Config struct {
 
 	// APIDocURL is the url to the API documentation.
 	APIDocURL string
+
+	// InitTaxa limits embedded import to certain taxa.
+	InitTaxa []string
+
+	// WithoutConfirm when true, remves confirmation dialogs.
+	WithoutConfirm bool
 }
 
 type Option func(*Config)
@@ -76,6 +82,18 @@ func OptDbBHLNames(s string) Option {
 func OptPort(i int) Option {
 	return func(cfg *Config) {
 		cfg.Port = i
+	}
+}
+
+func OptInitTaxa(ss []string) Option {
+	return func(cfg *Config) {
+		cfg.InitTaxa = ss
+	}
+}
+
+func OptWithoutConfirm(b bool) Option {
+	return func(cfg *Config) {
+		cfg.WithoutConfirm = b
 	}
 }
 

@@ -35,6 +35,10 @@ var initCmd = &cobra.Command{
 	Short: "Makes database, embeds BHL items and saves them.",
 	Long:  `Makes database, embeds BHL items and saves them.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		flags := []flagFunc{taxaFlag, noConfirmFlag}
+		for _, v := range flags {
+			v(cmd)
+		}
 		bq := bhlquestFactory()
 		err := bq.Init()
 		if err != nil {
@@ -49,4 +53,8 @@ var initCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(initCmd)
+	initCmd.Flags().StringP(
+		"taxa", "t", "",
+		`limit intake to certain taxa, e.g. "-t 'Aves,Mammalia'".`,
+	)
 }

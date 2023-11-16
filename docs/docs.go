@@ -202,7 +202,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "BHLQuest API",
-	Description:      "This is API to BHLQuest app. It finds places in Biodiversity Heritage Library that correspond to an asked question. \\n\\nCode: https://github.com/gnames/bhlquest. \\n\\nProduction server: https://bhlquest.globalnames.org/api/v1",
+	Description:      "This API serves the BHLQuest app. It locates relevant sections in the Biodiversity Heritage Library that correspond to a user's query. \\n\\nCode repository: https://github.com/gnames/bhlquest. \\n\\nAccess the API on the production server: https://bhlquest.globalnames.org/api/v1.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

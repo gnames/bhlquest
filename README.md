@@ -58,6 +58,7 @@ BHL corpus settings reflect their actual values.
 ```bash
 bhlquest init --taxa 'Aves,Mammalia'
 ```
+If no taxa are given, the intake will include all BHL data.
 
 It will take a while!
 

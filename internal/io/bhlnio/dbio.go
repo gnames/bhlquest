@@ -1,18 +1,30 @@
 package bhlnio
 
-import "context"
+import (
+	"context"
+
+	"github.com/jackc/pgx/v5"
+)
 
 func (bn *bhlnio) dbItems(
 	offset, limit int,
 	taxa []string,
 ) ([]uint, error) {
-	q := `
+	var rows pgx.Rows
+	var err error
+	var res []uint
+
+	if len(bn.cfg.InitTaxa) > 0 {
+		q := `
 SELECT id
   FROM item_stats
-  WHERE main_taxon in ('Aves')
-`
-	var res []uint
-	rows, err := bn.db.Query(context.Background(), q)
+  WHERE main_taxon = ANY($1::varchar[])`
+
+		rows, err = bn.db.Query(context.Background(), q, bn.cfg.InitTaxa)
+	} else {
+		q := `select id from items`
+		rows, err = bn.db.Query(context.Background(), q)
+	}
 
 	if err != nil {
 		return nil, err

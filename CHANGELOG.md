@@ -5,9 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add an option to limit BHL items intake by a list of taxa (#9)
+
 ### Added v0.0.1
 
-- Create API endpoint (close #8).
+- Create API endpoint (#8).
 - Ask a question and get an answer (#7).
 - Embed chunks and save to the database (#6).
 - Break items into chunks (#5).

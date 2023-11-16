@@ -62,7 +62,7 @@ var rootCmd = &cobra.Command{
 	Long:  `Adds AI capabilities to Biodiversity Heritage Library.`,
 	Run: func(cmd *cobra.Command, _ []string) {
 		versionFlag(cmd)
-		flags := []flagFunc{debugFlag}
+		flags := []flagFunc{debugFlag, noConfirmFlag}
 		for _, v := range flags {
 			v(cmd)
 		}
@@ -83,6 +83,8 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().BoolP("debug", "d", false, "changes log to debug level")
+	rootCmd.PersistentFlags().BoolP("yes-to-confirmations", "y", false,
+		"skip all confirmation dialogs")
 	rootCmd.Flags().BoolP("version", "V", false, "show version and build timestamp")
 }
 

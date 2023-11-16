@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/gnames/bhlquest/pkg/config"
@@ -47,6 +49,19 @@ func (bq bhlquest) Init() error {
 
 	msg := fmt.Sprintf("Found %d items.", len(ids))
 	slog.Info(msg)
+
+	if !bq.cfg.WithoutConfirm {
+		fmt.Printf(
+			"\nReady to process %d items. It will take a long time.\n",
+			len(ids),
+		)
+		fmt.Println("Do you want to proceed? (y/N)")
+		var confirm string
+		fmt.Scanln(&confirm)
+		if strings.ToLower(confirm) != "y" {
+			os.Exit(0)
+		}
+	}
 
 	slog.Info("Initiate BHLquest database.")
 	err = bq.emb.Init()

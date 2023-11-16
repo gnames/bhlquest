@@ -23,7 +23,7 @@ var static embed.FS
 
 // @title BHLQuest API
 // @version 1.0
-// @description This is API to BHLQuest app. It finds places in Biodiversity Heritage Library that correspond to an asked question. \n\nCode: https://github.com/gnames/bhlquest. \n\nProduction server: https://bhlquest.globalnames.org/api/v1
+// @description This API serves the BHLQuest app. It locates relevant sections in the Biodiversity Heritage Library that correspond to a user's query. \n\nCode repository: https://github.com/gnames/bhlquest. \n\nAccess the API on the production server: https://bhlquest.globalnames.org/api/v1.
 
 // @contact.name Dmitry Mozzherin
 // @contact.url https://github.com/dimus
