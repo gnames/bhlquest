@@ -127,6 +127,12 @@ func (bq bhlquest) GetConfig() config.Config {
 	return bq.cfg
 }
 
+func (bq bhlquest) SetConfig(cfg config.Config) BHLQuest {
+	bq.cfg = cfg
+	bq.emb = bq.emb.SetConfig(cfg)
+	return bq
+}
+
 // GetVersion provides version information of the app.
 func GetVersion() gnvers.Version {
 	version := gnvers.Version{

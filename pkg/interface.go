@@ -11,4 +11,5 @@ type BHLQuest interface {
 	Init() error
 	Ask(q string) (answer.Answer, error)
 	GetConfig() config.Config
+	SetConfig(config.Config) BHLQuest
 }

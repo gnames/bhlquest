@@ -3,6 +3,7 @@ package web
 import (
 	"net/http"
 	"net/url"
+	"strconv"
 
 	bhlquest "github.com/gnames/bhlquest/pkg" // for docs
 	"github.com/labstack/echo/v4"
@@ -54,12 +55,33 @@ func ver(c echo.Context) error {
 // @ID ask-question
 // @Produce json
 // @Param question path string true "A question to ask BHL about."
+// @Param max-results query integer false "The maximum number or returned results."
+// @Param score-threshold query number false "A score threshold from 0.0 to 1.0"
 // @Success 200 {array} answer.Answer "List of pages containing the answer"
 // @Router /ask/{question} [get]
 func ask(bq bhlquest.BHLQuest) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		q, _ := url.QueryUnescape(c.Param("question"))
+		cfg := bq.GetConfig()
+
+		maxStr, _ := url.QueryUnescape(c.QueryParam("max-results"))
+		max, err := strconv.Atoi(maxStr)
+		if err == nil && max > 0 && max < 100 {
+			cfg.MaxResultsNum = max
+		}
+
+		thrStr, _ := url.QueryUnescape(c.QueryParam("score-threshold"))
+		thr, err := strconv.ParseFloat(thrStr, 64)
+		if err == nil && thr >= 0.0 && thr <= 1.0 {
+			cfg.ScoreThreshold = 1 - thr
+		}
+
+		bq = bq.SetConfig(cfg)
+
 		answ, err := bq.Ask(q)
+		cfg = bq.GetConfig()
+		answ.MaxResultsNum = cfg.MaxResultsNum
+		answ.ScoreThreshold = 1 - cfg.ScoreThreshold
 		if err != nil {
 			return err
 		}

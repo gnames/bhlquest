@@ -5,11 +5,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.2] - 2023-11-17
+
+### Added v0.0.2
+
+- Add max-results and score-threshold parameters to API (#14)
 - Add parameters for maximum number of returns and score threshold (#13)
 - Change limiting factor from main_taxa to main_class of an item (#12)
 - Add better hanling of initiation process (#11)
 - Add text of matched chunk to the output (if possible) (#10)
 - Add an option to limit BHL items intake by a list of taxa (#9)
+
+## [v0.0.1] - 2023-11-15
 
 ### Added v0.0.1
 

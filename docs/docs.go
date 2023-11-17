@@ -56,6 +56,18 @@ const docTemplate = `{
                         "name": "question",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "The maximum number or returned results.",
+                        "name": "max-results",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "description": "A score threshold from 0.0 to 1.0",
+                        "name": "score-threshold",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -134,6 +146,10 @@ const docTemplate = `{
             "description": "Meta includes information such as the time taken to process the query.",
             "type": "object",
             "properties": {
+                "maxResultsNum": {
+                    "type": "integer",
+                    "example": 10
+                },
                 "queryTime": {
                     "description": "QueryTime is the duration taken to process the query.",
                     "type": "number",
@@ -142,6 +158,10 @@ const docTemplate = `{
                 "question": {
                     "type": "string",
                     "example": "What are ecological niches for Indigo Bunting?"
+                },
+                "scoreThreshold": {
+                    "type": "number",
+                    "example": 0.4
                 }
             }
         },

@@ -17,6 +17,9 @@ definitions:
   answer.Meta:
     description: Meta includes information such as the time taken to process the query.
     properties:
+      maxResultsNum:
+        example: 10
+        type: integer
       queryTime:
         description: QueryTime is the duration taken to process the query.
         example: 0.911422974
@@ -24,6 +27,9 @@ definitions:
       question:
         example: What are ecological niches for Indigo Bunting?
         type: string
+      scoreThreshold:
+        example: 0.4
+        type: number
     type: object
   answer.Result:
     description: Result holds information about a BHL page or range of pages that
@@ -116,6 +122,14 @@ paths:
         name: question
         required: true
         type: string
+      - description: The maximum number or returned results.
+        in: query
+        name: max-results
+        type: integer
+      - description: A score threshold from 0.0 to 1.0
+        in: query
+        name: score-threshold
+        type: number
       produces:
       - application/json
       responses:

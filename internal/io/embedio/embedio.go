@@ -120,6 +120,12 @@ func (e *embedio) Query(emb []float32) (answer.Answer, error) {
 	return res, nil
 }
 
+func (e *embedio) SetConfig(cfg config.Config) embed.Embed {
+	copy := *e
+	copy.cfg = cfg
+	return &copy
+}
+
 func (e *embedio) embedStream(
 	chIn <-chan []text.Chunk,
 	chOut chan<- []text.Chunk,
