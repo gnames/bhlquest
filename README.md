@@ -58,10 +58,16 @@ the BHL corpus settings accurately reflect their real values.
 4. Import and Embed a Subset of BHL data into Vectors
 
 ```bash
-bhlquest init --taxa 'Aves,Mammalia'
+bhlquest init --classes 'Aves,Mammalia' --rebuild-db
+
+# if init process was interrupted, it can be continued from the place it
+# stopped. Make sure the `--classes` values are the same as before.
+# Remove `--rebuild-db` flag to keep alreday saved data.
+
+bhlquest init --classes 'Aves,Mammalia'
 ```
 
-If no taxa are specified, the process will include all BHL data.
+If no clases are specified, the process will include all BHL data.
 
 It will take a **while**!
 

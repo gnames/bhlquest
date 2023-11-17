@@ -35,7 +35,7 @@ var initCmd = &cobra.Command{
 	Long:  `Makes database, embeds BHL items and saves them.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		flags := []flagFunc{taxaFlag, noConfirmFlag, rebuildDbFlag}
+		flags := []flagFunc{classesFlag, noConfirmFlag, rebuildDbFlag}
 		for _, v := range flags {
 			v(cmd)
 		}
@@ -53,8 +53,8 @@ var initCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(initCmd)
 	initCmd.Flags().StringP(
-		"taxa", "t", "",
-		`limit intake to certain taxa, e.g. "-t 'Aves,Mammalia'".`,
+		"classes", "c", "",
+		`limit intake to certain classes, e.g. "-t 'Aves,Mammalia'".`,
 	)
 	initCmd.Flags().BoolP(
 		"rebuild-db", "r", false,

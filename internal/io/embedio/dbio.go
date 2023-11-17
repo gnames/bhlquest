@@ -51,7 +51,6 @@ func (e *embedio) lastItemID() uint {
 	if err != nil {
 		return 0
 	}
-	fmt.Println("HEE")
 	return id
 }
 

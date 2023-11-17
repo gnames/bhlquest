@@ -28,8 +28,8 @@ type Config struct {
 	// APIDocURL is the url to the API documentation.
 	APIDocURL string
 
-	// InitTaxa limits embedded import to certain taxa.
-	InitTaxa []string
+	// InitClasses limits embedded import to certain taxa.
+	InitClasses []string
 
 	// WithoutConfirm when true, remves confirmation dialogs.
 	WithoutConfirm bool
@@ -89,9 +89,9 @@ func OptPort(i int) Option {
 	}
 }
 
-func OptInitTaxa(ss []string) Option {
+func OptInitClasses(ss []string) Option {
 	return func(cfg *Config) {
-		cfg.InitTaxa = ss
+		cfg.InitClasses = ss
 	}
 }
 

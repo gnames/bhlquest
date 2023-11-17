@@ -14,13 +14,13 @@ func (bn *bhlnio) dbItems(
 	var err error
 	var res []uint
 
-	if len(bn.cfg.InitTaxa) > 0 {
+	if len(bn.cfg.InitClasses) > 0 {
 		q := `
 SELECT id
   FROM item_stats
-  WHERE main_taxon = ANY($1::varchar[])`
+  WHERE main_class = ANY($1::varchar[])`
 
-		rows, err = bn.db.Query(context.Background(), q, bn.cfg.InitTaxa)
+		rows, err = bn.db.Query(context.Background(), q, bn.cfg.InitClasses)
 	} else {
 		q := `select id from items`
 		rows, err = bn.db.Query(context.Background(), q)

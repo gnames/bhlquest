@@ -152,7 +152,7 @@ func (e *embedio) saveStream(
 
 func incrLog(start time.Time, total, count, itemID, incr int) int {
 	count += incr
-	if count%100 == 0 {
+	if count%500 == 0 {
 		fmt.Fprint(os.Stderr, "\r")
 		slog.Info(logStr(start, total, count), "ItemID", itemID)
 	} else if count%10 == 0 {

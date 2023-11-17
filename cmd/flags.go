@@ -58,13 +58,13 @@ func versionFlag(cmd *cobra.Command) {
 	}
 }
 
-func taxaFlag(cmd *cobra.Command) {
-	s, _ := cmd.Flags().GetString("taxa")
+func classesFlag(cmd *cobra.Command) {
+	s, _ := cmd.Flags().GetString("classes")
 	if s != "" {
 		el := strings.Split(s, ",")
 		taxa := gnlib.Map(el, func(s string) string {
 			return strings.TrimSpace(s)
 		})
-		opts = append(opts, config.OptInitTaxa(taxa))
+		opts = append(opts, config.OptInitClasses(taxa))
 	}
 }

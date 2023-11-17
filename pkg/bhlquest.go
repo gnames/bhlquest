@@ -66,7 +66,7 @@ func (bq bhlquest) Init() error {
 	}
 
 	lastItemID := bq.emb.LastItemID()
-	if lastItemID > 0 {
+	if lastItemID > 0 && !bq.cfg.WithRebuildDb {
 		slog.Info("Selecting ItemIDs larger than last inserted record.", "Last ItemID", lastItemID)
 		tmp := make([]uint, 0, len(ids))
 		for i := range ids {
