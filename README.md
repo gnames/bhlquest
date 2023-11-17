@@ -1,25 +1,26 @@
 # BHLquest
 
-`BHLquest` is an AI app to query content of [Biodiversity Heritage Library]
+`BHLquest` is an AI application designed to query the content of
+ the[Biodiversity Heritage Library]
 
 ## Installation
 
-Make sure Go version on the computer is recent enough.
+Ensure that your computer's Go version is up to date.
 
-1. Install and run llmutil RESTful interface
+1. Install and Run `llmutil` RESTful Interface
 
 Follow instructions at [llmutil documentation]
 
-2. Install Go tools for `bhlquest`
+2. Install Go Tools for `bhlquest`
 
-Go to the root of `bhlquest` project and run:
+Navigate to the root of the `bhlquest` project and execute:
 
 ```bash
 make tools
 go mod tidy
 ```
 
-3. Install bhlquest
+3. Install `bhlquest`
 
 ```bash
 make install
@@ -27,22 +28,22 @@ make install
 
 ## Usage
 
-1. Install prerequisits and create database.
+1. Install Prerequisits and Create Database.
 
-* Create `bhlnames` and `bhlquest` databases in PostgreSQL
-* Download [bhlnames database dump]
-* Restore `bhlnames`
+* Create `bhlnames` and `bhlquest` databases in PostgreSQL.
+* Download the [bhlnames database dump].
+* Restore the `bhlnames` database:
 
 ```bash
 zstd -dc bhlnames-xxxx-xx-xx.zst|pg_restore -d bhlnames
 ```
 
-* Install BHL text corpus
-* Install [pgvector extension]. It is needed to store vector data.
+* Install the BHL text corpus.
+* Install [pgvector extension], which is necessary for storing vector data.
 
-2. First run
+2. Initial Run
 
-First run wil create configuration file. Usually it is written at
+First run wil create a configuration file, typically located at
 `$HOME/.config/bhlquest.yaml`:
 
 ```bash
@@ -51,19 +52,20 @@ bhlquest -V
 
 3. Edit `bhlquest.yaml`
 
-Make sure that database settings, llmutil URL, directory which points to
-BHL corpus settings reflect their actual values.
+Ensure that database settings, `llmutil` URL, directory which points to
+the BHL corpus settings accurately reflect their real values.
 
-4. Import a subset of BHL data, and embed it into vectors.
+4. Import and Embed a Subset of BHL data into Vectors.
 
 ```bash
 bhlquest init --taxa 'Aves,Mammalia'
 ```
-If no taxa are given, the intake will include all BHL data.
 
-It will take a while!
+If no taxa are specified, the process will include all BHL data.
 
-5. Use `bhlquest` via command line or via RESTful API
+It will take a **while**!
+
+5. Use `bhlquest` via Command Line or RESTful API
 
 ### Command line Usage
 
@@ -71,17 +73,17 @@ It will take a while!
 bhlquest ask "What are the ecological niches of the Indigo Bunting?"
 ```
 
-### Start RESTful API
+### Starting RESTful API
 
 ```bash
 bhlquest serve
 ```
 
-With default settings [API description] should be accessible.
+With the default settings, the [API description] should be accessible.
 
 ## Development
 
-### Autogenerate API documentation
+### Auto-generating API Documentation
 
 Install swag from the root of the project:
 
@@ -89,19 +91,19 @@ Install swag from the root of the project:
 make tools
 ```
 
-Run swag with the following command:
+To update the documentation, execute:
 
 ```bash
 swag init -g server.go -d ./internal/io/web
 ```
 
-Run the same command every time docs are updated.
+Run this command each time the docs are updated.
 
-### Genaration of a client for a particular language
+### Generation a Client for a Specific Language
 
-You can install openapi-generator to create an API client for a specific
-language. For example, for Ruby, run the following command from the project's
-root:
+You can use the `openapi-generator` to create an API client in a language of
+your choice. For instance, to generate a Ruby client, run the following
+command from the project's root:
 
 ```bash
 openapi-generator generate -i ./docs/swagger.yaml -g ruby -o ~/tmp/bhlquest --additional-properties gemName=bhlquest
