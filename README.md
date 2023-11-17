@@ -1,7 +1,7 @@
 # BHLquest
 
 `BHLquest` is an AI application designed to query the content of
- the[Biodiversity Heritage Library]
+ the [Biodiversity Heritage Library]
 
 ## Installation
 
@@ -9,7 +9,7 @@ Ensure that your computer's Go version is up to date.
 
 1. Install and Run `llmutil` RESTful Interface
 
-Follow instructions at [llmutil documentation]
+Follow instructions at [llmutil documentation].
 
 2. Install Go Tools for `bhlquest`
 
@@ -28,7 +28,7 @@ make install
 
 ## Usage
 
-1. Install Prerequisits and Create Database.
+1. Install Prerequisits and Create Database
 
 * Create `bhlnames` and `bhlquest` databases in PostgreSQL.
 * Download the [bhlnames database dump].
@@ -55,7 +55,7 @@ bhlquest -V
 Ensure that database settings, `llmutil` URL, directory which points to
 the BHL corpus settings accurately reflect their real values.
 
-4. Import and Embed a Subset of BHL data into Vectors.
+4. Import and Embed a Subset of BHL data into Vectors
 
 ```bash
 bhlquest init --taxa 'Aves,Mammalia'
@@ -85,7 +85,7 @@ With the default settings, the [API description] should be accessible.
 
 ### Auto-generating API Documentation
 
-Install swag from the root of the project:
+Install [`swag`] from the root of the project:
 
 ```bash
 make tools
@@ -115,3 +115,4 @@ openapi-generator generate -i ./docs/swagger.yaml -g ruby -o ~/tmp/bhlquest --ad
 [pgvector extension]: https://github.com/pgvector/pgvector
 [bhlnames database dump]: http://opendata.globalnames.org/dumps/bhlnames-2023-11-15.zst 
 [API description]: http://0.0.0.0:8555/apidoc/
+[`swag`]: https://github.com/swaggo/swag
