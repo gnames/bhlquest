@@ -45,6 +45,25 @@ func portFlag(cmd *cobra.Command) {
 	}
 }
 
+func maxResultsFlag(cmd *cobra.Command) {
+	i, _ := cmd.Flags().GetInt("max-results")
+	if i > 0 {
+		opts = append(opts, config.OptMaxResultsNum(i))
+	}
+}
+
+func scoreThresholdFlag(cmd *cobra.Command) {
+	f, _ := cmd.Flags().GetFloat64("score-threshold")
+	if f > 1 || f < 0 {
+		slog.Error("The score-threshold should be betwen 0 and 1")
+		slog.Error("Score 1 is perfect, 0 is no match.")
+		f = 0
+	}
+	if f > 0 {
+		opts = append(opts, config.OptScoreThreshold(1-f))
+	}
+}
+
 func versionFlag(cmd *cobra.Command) {
 	b, _ := cmd.Flags().GetBool("version")
 	if b {

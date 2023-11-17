@@ -39,6 +39,7 @@ var initCmd = &cobra.Command{
 		for _, v := range flags {
 			v(cmd)
 		}
+
 		bq := bhlquestFactory()
 		err := bq.Init()
 		if err != nil {

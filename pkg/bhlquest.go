@@ -76,7 +76,7 @@ func (bq bhlquest) Init() error {
 			tmp = append(tmp, ids[i])
 		}
 		ids = tmp
-		slog.Info("Reduced number of ItemIDs", "ItemDIs Number", len(ids))
+		slog.Info("Reduced number of ItemIDs", "ItemIDs Number", len(ids))
 	}
 
 	if bq.cfg.WithRebuildDb {
@@ -88,8 +88,7 @@ func (bq bhlquest) Init() error {
 	} else {
 		slog.Info("Skipping database rebild.")
 		slog.Warn(
-			"It might case duplicaton of some records " +
-				"if not careful.",
+			"It might create problems if 'classes' setting is different.",
 		)
 	}
 

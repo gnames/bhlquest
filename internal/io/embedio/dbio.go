@@ -84,7 +84,19 @@ func (e *embedio) save(chunks []text.Chunk) error {
 
 func (e *embedio) query(emb []float32) ([]text.Chunk, error) {
 	ctx := context.Background()
-	rows, err := e.db.Query(ctx, "SELECT id, item_id, page_id, page_id_end, item_offset, embedding <=> $1 as dot FROM chunks ORDER BY dot LIMIT 5", pgvector.NewVector(emb))
+	q := `
+SELECT id, item_id, page_id, page_id_end, item_offset,
+       embedding <=> $1 AS dot
+  FROM chunks
+  WHERE (embedding <=> $1) < $2
+  ORDER BY dot
+  LIMIT $3
+`
+	rows, err := e.db.Query(ctx, q,
+		pgvector.NewVector(emb),
+		e.cfg.ScoreThreshold,
+		e.cfg.MaxResultsNum,
+	)
 	if err != nil {
 		panic(err)
 	}

@@ -31,6 +31,13 @@ type Config struct {
 	// InitClasses limits embedded import to certain taxa.
 	InitClasses []string
 
+	// ScoreThreshold filters out results with too low score.
+	ScoreThreshold float64
+
+	// MaxResultsNum limits the maximum number of results returned
+	// in an answer.
+	MaxResultsNum int
+
 	// WithoutConfirm when true, remves confirmation dialogs.
 	WithoutConfirm bool
 
@@ -95,6 +102,18 @@ func OptInitClasses(ss []string) Option {
 	}
 }
 
+func OptScoreThreshold(f float64) Option {
+	return func(cfg *Config) {
+		cfg.ScoreThreshold = f
+	}
+}
+
+func OptMaxResultsNum(i int) Option {
+	return func(cfg *Config) {
+		cfg.MaxResultsNum = i
+	}
+}
+
 func OptWithoutConfirm(b bool) Option {
 	return func(cfg *Config) {
 		cfg.WithoutConfirm = b
@@ -109,15 +128,17 @@ func OptWithRebuildDb(b bool) Option {
 
 func New(opts ...Option) Config {
 	res := Config{
-		BHLDir:     "/opt/bhl/",
-		LlmUtilURL: "http://0.0.0.0:8000/api/v1/",
-		DbHost:     "0.0.0.0",
-		DbUser:     "postgres",
-		DbPass:     "postgres",
-		DbBHLQuest: "bhlquest",
-		DbBHLNames: "bhlnames",
-		Port:       8555,
-		APIDocURL:  "https://apidoc.globalnames.org/bhlquest",
+		BHLDir:         "/opt/bhl/",
+		LlmUtilURL:     "http://0.0.0.0:8000/api/v1/",
+		DbHost:         "0.0.0.0",
+		DbUser:         "postgres",
+		DbPass:         "postgres",
+		DbBHLQuest:     "bhlquest",
+		DbBHLNames:     "bhlnames",
+		Port:           8555,
+		APIDocURL:      "https://apidoc.globalnames.org/bhlquest",
+		ScoreThreshold: 0.4,
+		MaxResultsNum:  5,
 	}
 	for _, opt := range opts {
 		opt(&res)
