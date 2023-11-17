@@ -99,9 +99,9 @@ swag init -g server.go -d ./internal/io/web
 
 Run this command each time the docs are updated.
 
-### Generation a Client for a Specific Language
+### Generating a Client for a Specific Language
 
-You can use the `openapi-generator` to create an API client in a language of
+You can use the [`openapi-generator`] to create an API client in a language of
 your choice. For instance, to generate a Ruby client, run the following
 command from the project's root:
 
@@ -116,3 +116,4 @@ openapi-generator generate -i ./docs/swagger.yaml -g ruby -o ~/tmp/bhlquest --ad
 [bhlnames database dump]: http://opendata.globalnames.org/dumps/bhlnames-2023-11-15.zst 
 [API description]: http://0.0.0.0:8555/apidoc/
 [`swag`]: https://github.com/swaggo/swag
+[`openapi-generator`]: https://github.com/OpenAPITools/openapi-generator
