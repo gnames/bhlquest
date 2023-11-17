@@ -31,28 +31,25 @@ func (l *llmutilio) ping() error {
 	url := fmt.Sprintf("%sping", l.url)
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
-		err = fmt.Errorf("cannot create ping request: %w", err)
 		return err
 	}
 	request.Header.Set("Content-Type", "text/plain")
 
 	resp, err := l.client.Do(request)
 	if err != nil {
-		err = fmt.Errorf("cannot get pong: %w", err)
 		return err
 	}
 	defer resp.Body.Close()
 
 	respBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		err = fmt.Errorf("cannot read pong body: %w", err)
 		return err
 	}
 
 	pong := string(respBytes)
 
 	if !strings.HasPrefix(pong, "Pong!") {
-		return fmt.Errorf("Wrong pong reply: %s", pong)
+		return fmt.Errorf("wrong reply %s", pong)
 	}
 
 	return nil

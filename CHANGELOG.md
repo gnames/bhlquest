@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add better hanling of initiation process (#11)
 - Add text of matched chunk to the output (if possible) (#10)
 - Add an option to limit BHL items intake by a list of taxa (#9)
 

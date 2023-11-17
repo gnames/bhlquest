@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
-	"strconv"
+	"strings"
 	"sync"
+	"time"
 
+	"github.com/dustin/go-humanize"
 	"github.com/gnames/bhlquest/internal/io/dbshare"
 	"github.com/gnames/bhlquest/pkg/config"
 	"github.com/gnames/bhlquest/pkg/ent/answer"
@@ -15,14 +17,16 @@ import (
 	"github.com/gnames/bhlquest/pkg/ent/llmutil"
 	"github.com/gnames/bhlquest/pkg/ent/storage"
 	"github.com/gnames/bhlquest/pkg/ent/text"
+	"github.com/gnames/gnfmt"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type embedio struct {
-	cfg config.Config
-	db  *pgxpool.Pool
-	txt text.Text
-	llm llmutil.LlmUtil
+	cfg      config.Config
+	db       *pgxpool.Pool
+	txt      text.Text
+	llm      llmutil.LlmUtil
+	itemsNum int
 }
 
 func New(
@@ -55,15 +59,20 @@ func (e *embedio) Init() error {
 	return err
 }
 
+func (e *embedio) SetItemsNum(i int) {
+	e.itemsNum = i
+}
+
 func (e *embedio) Populate(itemIDs []uint) error {
 	chIn := make(chan []text.Chunk)
 	chOut := make(chan []text.Chunk)
 	var wg, saveWg sync.WaitGroup
 	wg.Add(1)
 	saveWg.Add(1)
+	start := time.Now()
 
 	go e.embedStream(chIn, chOut, &wg)
-	go e.saveStream(chOut, &saveWg)
+	go e.saveStream(chOut, start, &saveWg)
 
 	e.loadChunks(chIn, itemIDs)
 
@@ -73,6 +82,10 @@ func (e *embedio) Populate(itemIDs []uint) error {
 	saveWg.Wait()
 
 	return nil
+}
+
+func (e *embedio) LastItemID() uint {
+	return e.lastItemID()
 }
 
 func (e *embedio) Embed(texts []string) ([][]float32, error) {
@@ -116,22 +129,55 @@ func (e *embedio) embedStream(
 	for chnks := range chIn {
 		chnks, err := e.llm.Embed(chnks)
 		if err != nil {
-			slog.Error(err.Error())
+			slog.Error("Cannot embed with llmutil", "error", err)
 			os.Exit(1)
 		}
 		chOut <- chnks
 	}
 }
 
-func (e *embedio) saveStream(chOut <-chan []text.Chunk, saveWg *sync.WaitGroup) {
+func (e *embedio) saveStream(
+	chOut <-chan []text.Chunk,
+	start time.Time,
+	saveWg *sync.WaitGroup,
+) {
 	defer saveWg.Done()
 	var count int
 	for ch := range chOut {
-		count++
-		slog.Info(strconv.Itoa(count))
+		count = incrLog(start, e.itemsNum, count, int(ch[0].ItemID), 1)
 		e.save(ch)
-		_ = ch
+
 	}
+}
+
+func incrLog(start time.Time, total, count, itemID, incr int) int {
+	count += incr
+	if count%100 == 0 {
+		fmt.Fprint(os.Stderr, "\r")
+		slog.Info(logStr(start, total, count), "ItemID", itemID)
+	} else if count%10 == 0 {
+		fmt.Fprintf(os.Stderr, "\r%s", strings.Repeat(" ", 80))
+		fmt.Fprint(os.Stderr, "\r"+logStr(start, total, count))
+	}
+	return count
+}
+
+func logStr(start time.Time, total, count int) string {
+	rate := itemsPerHour(start, count)
+	countStr := humanize.Comma(int64(count))
+	perHourStr := humanize.Comma(int64(rate))
+	percent := 100 * float64(count) / float64(total)
+	eta := 3600 * float64(total-count) / rate
+	etaStr := gnfmt.TimeString(eta)
+	return fmt.Sprintf(
+		"%s items (%0.1f%%), %s items/hr: ETA %s",
+		countStr, percent, perHourStr, etaStr,
+	)
+}
+
+func itemsPerHour(start time.Time, count int) float64 {
+	dur := float64(time.Since(start)) / float64(time.Hour)
+	return float64(count) / dur
 }
 
 func (e *embedio) loadChunks(
@@ -141,7 +187,7 @@ func (e *embedio) loadChunks(
 	for _, id := range itemIDs {
 		chunks, err := e.txt.TextToChunks(id)
 		if err != nil {
-			slog.Error(err.Error())
+			slog.Error("Cannot create chunks", "error", err)
 			os.Exit(1)
 		}
 		chIn <- chunks

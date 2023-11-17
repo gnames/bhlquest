@@ -42,11 +42,28 @@ CREATE TABLE chunks (
 
 }
 
+func (e *embedio) lastItemID() uint {
+	ctx := context.Background()
+	q := `SELECT item_id FROM chunks WHERE id = (SELECT MAX(id) FROM chunks)`
+	row := e.db.QueryRow(ctx, q)
+	var id uint
+	err := row.Scan(&id)
+	if err != nil {
+		return 0
+	}
+	fmt.Println("HEE")
+	return id
+}
+
 func (e *embedio) save(chunks []text.Chunk) error {
-	cxt := context.Background()
+	ctx := context.Background()
 	q := `INSERT INTO chunks
 		(item_id, page_id, page_id_end, item_offset, embedding)
 		VALUES ($1, $2, $3, $4, $5)`
+	tx, err := e.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
 	for _, v := range chunks {
 		pIDs := v.PageIDs
 		l := len(pIDs)
@@ -54,10 +71,14 @@ func (e *embedio) save(chunks []text.Chunk) error {
 			continue
 		}
 		vec := pgvector.NewVector(v.Embedding)
-		_, err := e.db.Exec(cxt, q, v.ItemID, pIDs[0], pIDs[l-1], v.Start, vec)
+		_, err := e.db.Exec(ctx, q, v.ItemID, pIDs[0], pIDs[l-1], v.Start, vec)
 		if err != nil {
 			return err
 		}
+	}
+	err = tx.Commit(ctx)
+	if err != nil {
+		return err
 	}
 	return nil
 }

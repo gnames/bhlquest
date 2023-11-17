@@ -22,7 +22,6 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
 
@@ -35,15 +34,15 @@ var initCmd = &cobra.Command{
 	Short: "Makes database, embeds BHL items and saves them.",
 	Long:  `Makes database, embeds BHL items and saves them.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		flags := []flagFunc{taxaFlag, noConfirmFlag}
+
+		flags := []flagFunc{taxaFlag, noConfirmFlag, rebuildDbFlag}
 		for _, v := range flags {
 			v(cmd)
 		}
 		bq := bhlquestFactory()
 		err := bq.Init()
 		if err != nil {
-			msg := fmt.Sprintf("Init failed: %s", err)
-			slog.Error(msg)
+			slog.Error("Init failed", "error", err)
 			os.Exit(1)
 		}
 
@@ -56,5 +55,9 @@ func init() {
 	initCmd.Flags().StringP(
 		"taxa", "t", "",
 		`limit intake to certain taxa, e.g. "-t 'Aves,Mammalia'".`,
+	)
+	initCmd.Flags().BoolP(
+		"rebuild-db", "r", false,
+		"deletes database and starts it from scratch",
 	)
 }

@@ -23,6 +23,8 @@ package cmd
 
 import (
 	"fmt"
+	"log/slog"
+	"os"
 
 	"github.com/gnames/bhlquest/internal/io/web"
 	"github.com/spf13/cobra"
@@ -34,6 +36,9 @@ var serveCmd = &cobra.Command{
 	Short: "Starts RESTful service and a web-page.",
 	Long:  `Starts RESTful service and a web-page`,
 	Run: func(cmd *cobra.Command, args []string) {
+		handle := slog.NewJSONHandler(os.Stderr, nil)
+		logger := slog.New(handle)
+		slog.SetDefault(logger)
 		flags := []flagFunc{portFlag, debugFlag}
 		for _, v := range flags {
 			v(cmd)

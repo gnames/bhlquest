@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
 
@@ -18,8 +17,7 @@ func bhlquestFactory() bhlquest.BHLQuest {
 
 	bn, err := bhlnio.New(cfg)
 	if err != nil {
-		msg := fmt.Sprintf("Init of BHLNames failed: %s", err)
-		slog.Error(msg)
+		slog.Error("No connection to BHLNames db", "error", err)
 		os.Exit(1)
 	}
 
@@ -27,14 +25,12 @@ func bhlquestFactory() bhlquest.BHLQuest {
 
 	llm, err := llmutilio.New(cfg)
 	if err != nil {
-		msg := fmt.Sprintf("Init of BHLNames failed: %s", err)
-		slog.Error(msg)
+		slog.Error("No connection to llmutil", "error", err)
 		os.Exit(1)
 	}
 	emb, err := embedio.New(cfg, stg, llm)
 	if err != nil {
-		msg := fmt.Sprintf("Init of BHLNames failed: %s", err)
-		slog.Error(msg)
+		slog.Error("No connection to embedding db", "error", err)
 		os.Exit(1)
 	}
 

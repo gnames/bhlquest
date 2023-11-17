@@ -33,6 +33,10 @@ type Config struct {
 
 	// WithoutConfirm when true, remves confirmation dialogs.
 	WithoutConfirm bool
+
+	// WithRebuildDb flag is true if the bhlquest database needs to
+	// be rebuilt from scratch.
+	WithRebuildDb bool
 }
 
 type Option func(*Config)
@@ -94,6 +98,12 @@ func OptInitTaxa(ss []string) Option {
 func OptWithoutConfirm(b bool) Option {
 	return func(cfg *Config) {
 		cfg.WithoutConfirm = b
+	}
+}
+
+func OptWithRebuildDb(b bool) Option {
+	return func(cfg *Config) {
+		cfg.WithRebuildDb = b
 	}
 }
 

@@ -47,12 +47,14 @@ func (bq bhlquest) Init() error {
 		return err
 	}
 
-	msg := fmt.Sprintf("Found %d items.", len(ids))
+	itemsNum := len(ids)
+	bq.emb.SetItemsNum(itemsNum)
+	msg := fmt.Sprintf("Found %d items.", itemsNum)
 	slog.Info(msg)
 
 	if !bq.cfg.WithoutConfirm {
 		fmt.Printf(
-			"\nReady to process %d items. It will take a long time.\n",
+			"\nReady to process %d items. It might take a long time.\n",
 			len(ids),
 		)
 		fmt.Println("Do you want to proceed? (y/N)")
@@ -63,10 +65,32 @@ func (bq bhlquest) Init() error {
 		}
 	}
 
-	slog.Info("Initiate BHLquest database.")
-	err = bq.emb.Init()
-	if err != nil {
-		return err
+	lastItemID := bq.emb.LastItemID()
+	if lastItemID > 0 {
+		slog.Info("Selecting ItemIDs larger than last inserted record.", "Last ItemID", lastItemID)
+		tmp := make([]uint, 0, len(ids))
+		for i := range ids {
+			if ids[i] <= lastItemID {
+				continue
+			}
+			tmp = append(tmp, ids[i])
+		}
+		ids = tmp
+		slog.Info("Reduced number of ItemIDs", "ItemDIs Number", len(ids))
+	}
+
+	if bq.cfg.WithRebuildDb {
+		slog.Info("Initiate BHLquest database.")
+		err = bq.emb.Init()
+		if err != nil {
+			return err
+		}
+	} else {
+		slog.Info("Skipping database rebild.")
+		slog.Warn(
+			"It might case duplicaton of some records " +
+				"if not careful.",
+		)
 	}
 
 	slog.Info("Find Items' texts and prepare them for AI.")

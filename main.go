@@ -26,12 +26,12 @@ import (
 	"os"
 
 	"github.com/gnames/bhlquest/cmd"
+	"github.com/lmittmann/tint"
 )
 
 func main() {
-	handle := slog.NewJSONHandler(os.Stderr, nil)
-	logger := slog.New(handle)
-	slog.SetDefault(logger)
+	handle := slog.New(tint.NewHandler(os.Stderr, nil))
+	slog.SetDefault(handle)
 
 	cmd.Execute()
 }

@@ -45,8 +45,7 @@ var askCmd = &cobra.Command{
 		q := args[0]
 		answer, err := bq.Ask(q)
 		if err != nil {
-			msg := fmt.Sprintf("Cannot get reply: %s", err)
-			slog.Error(msg)
+			slog.Error("No reply", "error", err)
 			os.Exit(1)
 		}
 		enc := gnfmt.GNjson{}
