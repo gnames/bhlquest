@@ -32,11 +32,12 @@ make install
 * Create `bhlnames` and `bhlquest` databases in PostgreSQL
 * Download [bhlnames database dump]
 * Restore `bhlnames`
-* Install BHL text corpus
 
 ```bash
 zstd -dc bhlnames-xxxx-xx-xx.zst|pg_restore -d bhlnames
 ```
+
+* Install BHL text corpus
 * Install [pgvector extension]. It is needed to store vector data.
 
 2. First run
