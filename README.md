@@ -1,7 +1,8 @@
 # BHLquest
 
 `BHLquest` is an AI application designed to query the content of
- the [Biodiversity Heritage Library]
+ the [Biodiversity Heritage Library]. The application is local and does
+ not depend on external services.
 
 ## Installation
 
