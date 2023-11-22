@@ -15,11 +15,21 @@ type Answer struct {
 // @Description Meta includes information such as the
 // @Description time taken to process the query.
 type Meta struct {
-	Question       string  `json:"question" example:"What are ecological niches for Indigo Bunting?"`
-	MaxResultsNum  int     `json:"maxResultsNum" example:"10"`
+	// Question asked by user.
+	Question string `json:"question" example:"What are ecological niches for Indigo Bunting?"`
+
+	// MaxResultsNum is the maximum number of returned results.
+	MaxResultsNum int `json:"maxResultsNum" example:"10"`
+
+	// ScoreThreshold determines the smallest score which is
+	// still considered for results.
 	ScoreThreshold float64 `json:"scoreThreshold" example:"0.4"`
+
 	// QueryTime is the duration taken to process the query.
 	QueryTime float64 `json:"queryTime" example:"0.911422974"`
+
+	// Version of BHLQuest
+	Version string `json:"version" example:"v0.0.3"`
 }
 
 // Result represents a specific answer found in BHL.

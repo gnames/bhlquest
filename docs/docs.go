@@ -147,6 +147,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "maxResultsNum": {
+                    "description": "MaxResultsNum is the maximum number of returned results.",
                     "type": "integer",
                     "example": 10
                 },
@@ -156,12 +157,19 @@ const docTemplate = `{
                     "example": 0.911422974
                 },
                 "question": {
+                    "description": "Question asked by user.",
                     "type": "string",
                     "example": "What are ecological niches for Indigo Bunting?"
                 },
                 "scoreThreshold": {
+                    "description": "ScoreThreshold determines the smallest score which is\nstill considered for results.",
                     "type": "number",
                     "example": 0.4
+                },
+                "version": {
+                    "description": "Version of BHLQuest",
+                    "type": "string",
+                    "example": "v0.0.3"
                 }
             }
         },

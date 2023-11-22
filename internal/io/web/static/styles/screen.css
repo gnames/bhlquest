@@ -1,5 +1,5 @@
 body {
-  color: #323232;
+  color: #3d90c8;
   background: url("/static/images/body-background.png") repeat scroll 0 0 transparent;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 14px;
@@ -14,7 +14,7 @@ h1 {
   margin: 0px; }
 
 h2 {
-  color: #962825;
+  color: #3d90c8;
   font-weight: bold;
   font-size: 1.75em;
   white-space: nowrap;
@@ -22,7 +22,7 @@ h2 {
   text-shadow: 0 -1px 2px #fff; }
 
 h3 {
-  color: #45704D;
+  color: #3d90c8;
   font-size: 1.2em;
   line-height: 1.2em;
   margin: 1em 0em; }
@@ -41,7 +41,7 @@ ol, ul {
   margin: 0px; }
 
 a {
-  color: #45704D;
+  color: #3d90c8;
   text-decoration: none; }
 
 p {
@@ -57,6 +57,10 @@ dd {
 
 fieldset {
   border: 0px; }
+
+.result-data {
+  color: black;
+}
 
 label {
   font-family: arial;
@@ -215,8 +219,8 @@ label {
   margin: 0.5em 1em; }
 
 #content-body {
-  min-height: 200px;
-  padding: 0 40px 30px;
+  min-height: 80px;
+  padding: 0 10px 10px;
   position: relative;
   font-size: 1.2em; }
 
@@ -247,6 +251,10 @@ label {
   font-size: 13px;
   font-weight: bold;
   margin: 15px 0 6px; }
+
+#version {
+  margin-top: 1em;
+}
 
 .clear:after {
   clear: both;
@@ -280,8 +288,29 @@ p.separator {
   font-weight: bold; }
 
 #form-panel {
-  width: 85%;
-  margin: 0px auto; }
+  // width: 85%;
+  border: 1px solid #3d90c8;
+  border-radius: 8px;
+  padding: 1em;
+  background-color: #3d90c8;
+  }
+
+#form-panel label {
+  color: white;
+}
+
+#form-panel p {
+  color: white;
+  font-size: 1em;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+#form-panel button {
+  border 1px solid white;
+  border-radius: 3px;
+}
 
 input[type="text"], input[type="email"], input[type="file"], textarea {
   color: #000000;
@@ -294,12 +323,19 @@ input[type="text"], input[type="email"], input[type="file"], textarea {
   letter-spacing: -1px;
   line-height: normal;
   padding: 5px;
-  margin: 0.2em; }
+  margin: 0.2em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+   }
+
 
 textarea {
   border: 1px solid #B0ADA3;
   border-radius: 6px;
   padding: 10px;
+  margin: 0;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
   width: 97%;
   resize: none;
   font-size: 1em; }

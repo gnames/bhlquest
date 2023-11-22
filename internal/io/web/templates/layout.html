@@ -1,0 +1,69 @@
+{{ define "layout" }}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BHL Quest</title>
+    <link href="/static/styles/screen.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href='/static/images/favicon.ico' rel='icon' type='image/x-icon'>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div id="SiteContainer" class="structural">
+
+      <div class="background"></div>
+
+      <div id="Header" class="structural fixedWidth">
+        <div class="inner">
+          <div id="Logo">
+            <a href="/">
+              <h1>Biodiversity Heritage Library Quest</h1>
+            </a>
+          </div>
+          <ul id="SiteNavigation">
+            {{ if eq .Page "home" }}
+            <li class="active"><a href="/">Home</a></li>
+            {{ else }}
+            <li><a href="/">Home</a></li>
+            {{ end }}
+            <li><a href="/apidoc/">API</a></li>
+            {{ if eq .Page "about" }}
+            <li class="active"><a href="/about">About</a></li>
+            {{ else }}
+            <li><a href="/about">About</a></li>
+            {{ end }}
+
+          </ul>
+        </div>
+      </div>
+
+      <div id="BodyContent" class="structural fixedWidth clear">
+        <div class="inner">
+          <div id="content-wrapper">
+            <div id="content-body">
+              {{ if eq .Page "home" }}
+              {{ template "home" . }}
+              {{ else if eq .Page "about" }}
+              {{ template "about" . }}
+              {{ end }}
+
+              <div id="version">
+                <a href='https://github.com/gnames/bhlquest'>
+                  Version {{ .Version }}
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="Footer" class="structural fixedWidth">
+        <div class="inner">
+          <span><image src="/static/images/gn-small.png" /><a href="https://www.globalnames.org">&nbsp;Powered by Global Names</a></span>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
+{{ end }}
+

@@ -18,6 +18,7 @@ definitions:
     description: Meta includes information such as the time taken to process the query.
     properties:
       maxResultsNum:
+        description: MaxResultsNum is the maximum number of returned results.
         example: 10
         type: integer
       queryTime:
@@ -25,11 +26,19 @@ definitions:
         example: 0.911422974
         type: number
       question:
+        description: Question asked by user.
         example: What are ecological niches for Indigo Bunting?
         type: string
       scoreThreshold:
+        description: |-
+          ScoreThreshold determines the smallest score which is
+          still considered for results.
         example: 0.4
         type: number
+      version:
+        description: Version of BHLQuest
+        example: v0.0.3
+        type: string
     type: object
   answer.Result:
     description: Result holds information about a BHL page or range of pages that

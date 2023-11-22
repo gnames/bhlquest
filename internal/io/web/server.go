@@ -1,10 +1,12 @@
 package web
 
 import (
+	"context"
 	"embed"
 	"fmt"
 	"log/slog"
 	"net/http"
+	"os"
 	"time"
 
 	_ "github.com/gnames/bhlquest/docs"
@@ -39,13 +41,22 @@ var static embed.FS
 // @host localhost:8555
 // @BasePath /api/v1
 func Run(bq bhlquest.BHLQuest) {
+	var err error
 	port := bq.GetConfig().Port
 	slog.Info("Starting HTTP API server", "port", port)
 	e := echo.New()
 	e.Use(middleware.Gzip())
 	e.Use(middleware.CORS())
 
-	e.GET("/", home(bq))
+	setLogger(e)
+
+	e.Renderer, err = NewTemplate()
+	if err != nil {
+		e.Logger.Fatal(err)
+	}
+
+	e.GET("/", homeGET(bq))
+	e.GET("/about", about)
 	e.GET("/apidoc/*", echoSwagger.WrapHandler)
 	e.GET("/api", info)
 	e.GET("/api/", info)
@@ -62,5 +73,34 @@ func Run(bq bhlquest.BHLQuest) {
 		ReadTimeout:  5 * time.Minute,
 		WriteTimeout: 5 * time.Minute,
 	}
+
+	fs := http.FileServer(http.FS(static))
+	e.GET("/static/*", echo.WrapHandler(fs))
+
 	e.Logger.Fatal(e.StartServer(s))
+}
+
+func setLogger(e *echo.Echo) {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
+		LogStatus:   true,
+		LogURI:      true,
+		LogError:    true,
+		HandleError: true, // forwards error to the global error handler, so it can decide appropriate status code
+		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
+			if v.Error == nil {
+				logger.LogAttrs(context.Background(), slog.LevelInfo, "REQUEST",
+					slog.String("uri", v.URI),
+					slog.Int("status", v.Status),
+				)
+			} else {
+				logger.LogAttrs(context.Background(), slog.LevelError, "REQUEST_ERROR",
+					slog.String("uri", v.URI),
+					slog.Int("status", v.Status),
+					slog.String("err", v.Error.Error()),
+				)
+			}
+			return nil
+		},
+	}))
 }

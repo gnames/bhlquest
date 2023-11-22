@@ -120,6 +120,7 @@ func (bq bhlquest) Ask(q string) (answer.Answer, error) {
 	duration := time.Since(start).Seconds()
 	res.Meta.Question = q
 	res.Meta.QueryTime = duration
+	res.Meta.Version = GetVersion().Version
 	return res, nil
 }
 
