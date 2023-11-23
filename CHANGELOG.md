@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.3] - 2023-11-23
+
 - Add steps needed for Kubernetes deployment (#16)
 - Add web GUI (#15)
 

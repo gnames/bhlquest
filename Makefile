@@ -57,7 +57,7 @@ install: openapi ## Build and install binary
 	$(NO_C) $(GOINSTALL)
 
 ## Release
-release: openapi buildrel ## Build and package binaries for a release
+release: openapi buildrel dockerhub ## Build and package binaries for a release
 	$(GOCLEAN); \
 	$(FLAGS_SHARED) GOOS=linux $(GORELEASE); \
 	tar zcvf $(RELEASE_DIR)/$(PROJ_NAME)-$(VER)-linux.tar.gz $(PROJ_NAME); \
@@ -79,6 +79,14 @@ coverage: ## Run the tests of the project and export the coverage
 ## OpenAPI generation
 openapi: ## Generate documentation for OpenAPI
 	swag init -g server.go -d ./internal/io/web  --parseDependency --parseInternal
+
+docker: buildrel
+	docker buildx build -t gnames/$(PROJ_NAME):latest -t gnames/$(PROJ_NAME):$(VERSION) .; \
+	$(GOCLEAN);
+
+dockerhub: docker
+	docker push gnames/$(PROJ_NAME); \
+	docker push gnames/$(PROJ_NAME):$(VERSION)
 
 ## Help:
 help: ## Show this help

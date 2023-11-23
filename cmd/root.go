@@ -111,6 +111,10 @@ func initConfig() {
 	_ = viper.BindEnv("DbPass", "BHLQ_DB_PASS")
 	_ = viper.BindEnv("DbBHLQuest", "BHLQ_DB_BHL_QUEST")
 	_ = viper.BindEnv("DbBHLNames", "BHLQ_DB_BHL_NAMES")
+	_ = viper.BindEnv("Port", "BHLQ_PORT")
+	_ = viper.BindEnv("InitClasses", "BHLQ_INIT_CLASSES")
+	_ = viper.BindEnv("ScoreThreshold", "BHLQ_SCORE_THRESHOLD")
+	_ = viper.BindEnv("MaxResultsNum", "BHLQ_MAX_RESULTS_NUM")
 
 	viper.AutomaticEnv() // read in environment variables that match
 
