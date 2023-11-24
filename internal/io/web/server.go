@@ -38,7 +38,7 @@ var static embed.FS
 // @Server http://localhost:8555 Description for local server
 // @Server https://bhlquest.globalnames.org Description for production server
 
-// @host localhost:8555
+// @host bhlquest.globalnames.org
 // @BasePath /api/v1
 func Run(bq bhlquest.BHLQuest) {
 	var err error
