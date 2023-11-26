@@ -31,6 +31,9 @@ type Config struct {
 	// InitClasses limits embedded import to certain taxa.
 	InitClasses []string
 
+	// InitTaxa limitd embedded import to main taxons of items.
+	InitTaxa []string
+
 	// ScoreThreshold filters out results with too low score.
 	ScoreThreshold float64
 
@@ -99,6 +102,12 @@ func OptPort(i int) Option {
 func OptInitClasses(ss []string) Option {
 	return func(cfg *Config) {
 		cfg.InitClasses = ss
+	}
+}
+
+func OptInitTaxa(ss []string) Option {
+	return func(cfg *Config) {
+		cfg.InitTaxa = ss
 	}
 }
 

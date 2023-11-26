@@ -2,6 +2,7 @@ package bhlnio
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -14,13 +15,25 @@ func (bn *bhlnio) dbItems(
 	var err error
 	var res []uint
 
-	if len(bn.cfg.InitClasses) > 0 {
-		q := `
-SELECT id
-  FROM item_stats
-  WHERE main_class = ANY($1::varchar[])`
+	table := "items"
+	if len(bn.cfg.InitClasses) > 0 || len(bn.cfg.InitTaxa) > 0 {
+		table = "item_stats"
+	}
 
-		rows, err = bn.db.Query(context.Background(), q, bn.cfg.InitClasses)
+	q := fmt.Sprintf("SELECT id FROM %s", table)
+
+	if table == "item_stats" {
+		q += `
+WHERE main_class = ANY($1::varchar[]) OR
+      main_taxon = ANY($2::varchar[])
+`
+
+		rows, err = bn.db.Query(
+			context.Background(),
+			q,
+			bn.cfg.InitClasses,
+			bn.cfg.InitTaxa,
+		)
 	} else {
 		q := `select id from items`
 		rows, err = bn.db.Query(context.Background(), q)

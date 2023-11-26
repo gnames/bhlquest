@@ -14,7 +14,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8555",
+    "host": "bhlquest.globalnames.org",
     "basePath": "/api/v1",
     "paths": {
         "/": {

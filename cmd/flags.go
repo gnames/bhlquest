@@ -81,9 +81,20 @@ func classesFlag(cmd *cobra.Command) {
 	s, _ := cmd.Flags().GetString("classes")
 	if s != "" {
 		el := strings.Split(s, ",")
+		classes := gnlib.Map(el, func(s string) string {
+			return strings.TrimSpace(s)
+		})
+		opts = append(opts, config.OptInitClasses(classes))
+	}
+}
+
+func taxonsFlag(cmd *cobra.Command) {
+	s, _ := cmd.Flags().GetString("taxons")
+	if s != "" {
+		el := strings.Split(s, ",")
 		taxa := gnlib.Map(el, func(s string) string {
 			return strings.TrimSpace(s)
 		})
-		opts = append(opts, config.OptInitClasses(taxa))
+		opts = append(opts, config.OptInitTaxa(taxa))
 	}
 }
