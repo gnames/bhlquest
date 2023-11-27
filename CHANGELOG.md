@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.4] - 2023-11-27
+
 - Add flag to show or hide matched texts (#18)
 - Update web GUI form with GET data (#17)
 
