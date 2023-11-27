@@ -57,5 +57,5 @@ type Result struct {
 	Outlink string `json:"outlink" example:"https://www.biodiversitylibrary.org/page/53469262"`
 
 	// Text respresents the actual string that was used for matching by AI.
-	Text string `json:"text:optional"`
+	Text string `json:"text,omitempty"`
 }

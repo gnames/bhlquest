@@ -4,7 +4,7 @@
     <p>Score: {{ formatFloat .Score }}<p>
     <p><a href='{{ .Outlink }}'>{{ .Outlink }}</a></p>
     {{ if .Text }}
-      <p>{{ .Text | formatText }}</p>
+      <div class='result-text'>{{ .Text | formatText }}</div>
     {{ end }}
   </div>
   <hr/>

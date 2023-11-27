@@ -98,3 +98,10 @@ func taxonsFlag(cmd *cobra.Command) {
 		opts = append(opts, config.OptInitTaxa(taxa))
 	}
 }
+
+func withTextFlag(cmd *cobra.Command) {
+	b, _ := cmd.Flags().GetBool("text-with-results")
+	if b {
+		opts = append(opts, config.OptWithText(true))
+	}
+}

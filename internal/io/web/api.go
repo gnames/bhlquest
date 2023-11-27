@@ -57,6 +57,7 @@ func ver(c echo.Context) error {
 // @Param question path string true "A question to ask BHL about."
 // @Param max-results query integer false "The maximum number or returned results."
 // @Param score-threshold query number false "A score threshold from 0.0 to 1.0"
+// @Param with-text query bool false "Shows matched text in results"
 // @Success 200 {array} answer.Answer "List of pages containing the answer"
 // @Router /ask/{question} [get]
 func ask(bq bhlquest.BHLQuest) func(c echo.Context) error {
@@ -75,6 +76,8 @@ func ask(bq bhlquest.BHLQuest) func(c echo.Context) error {
 		if err == nil && thr >= 0.0 && thr <= 1.0 {
 			cfg.ScoreThreshold = 1 - thr
 		}
+
+		cfg.WithText = c.QueryParam("with-text") == "true"
 
 		bq = bq.SetConfig(cfg)
 

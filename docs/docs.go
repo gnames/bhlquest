@@ -68,6 +68,12 @@ const docTemplate = `{
                         "description": "A score threshold from 0.0 to 1.0",
                         "name": "score-threshold",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Shows matched text in results",
+                        "name": "with-text",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -202,7 +208,7 @@ const docTemplate = `{
                     "type": "number",
                     "example": 0.7505834773704542
                 },
-                "text:optional": {
+                "text": {
                     "description": "Text respresents the actual string that was used for matching by AI.",
                     "type": "string"
                 }

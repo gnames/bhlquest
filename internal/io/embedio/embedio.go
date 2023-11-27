@@ -100,8 +100,13 @@ func (e *embedio) Query(emb []float32) (answer.Answer, error) {
 	}
 	var data []answer.Result
 	for i := range chs {
+		var txt string
 		l := len(chs[i].PageIDs)
-		txt := e.txt.ChunkText(chs[i])
+
+		if e.cfg.WithText {
+			txt = e.txt.ChunkText(chs[i])
+		}
+
 		d := answer.Result{
 			ItemID:      chs[i].ItemID,
 			PageIDStart: chs[i].PageIDs[0],

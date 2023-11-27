@@ -47,6 +47,10 @@ type Config struct {
 	// WithRebuildDb flag is true if the bhlquest database needs to
 	// be rebuilt from scratch.
 	WithRebuildDb bool
+
+	// WithText is a flag that control appearance of matched texts with
+	// the results. If the flag is false, the text does not appear.
+	WithText bool
 }
 
 type Option func(*Config)
@@ -132,6 +136,12 @@ func OptWithoutConfirm(b bool) Option {
 func OptWithRebuildDb(b bool) Option {
 	return func(cfg *Config) {
 		cfg.WithRebuildDb = b
+	}
+}
+
+func OptWithText(b bool) Option {
+	return func(cfg *Config) {
+		cfg.WithText = b
 	}
 }
 

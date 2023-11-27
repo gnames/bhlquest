@@ -62,6 +62,15 @@ fieldset {
   color: black;
 }
 
+.result-text {
+  color: #555;
+  line-height: 1.1em;
+  margin-bottom: 1em;
+  padding-left: 1em;
+  height: 100px;
+  overflow: auto;
+}
+
 label {
   font-family: arial;
   font-size: 1.2em;

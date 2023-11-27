@@ -25,6 +25,7 @@ type formInput struct {
 	Question       string  `query:"question"`
 	MaxResultsNum  int     `query:"max_results"`
 	ScoreThreshold float64 `query:"score_threshold"`
+	WithText       string  `query:"with_text"`
 	Format         string  `query:"format"`
 }
 
@@ -49,6 +50,7 @@ func homeGET(bq bhlquest.BHLQuest) func(echo.Context) error {
 		cfg := bq.GetConfig()
 		cfg.MaxResultsNum = inp.MaxResultsNum
 		cfg.ScoreThreshold = inp.ScoreThreshold
+		cfg.WithText = inp.WithText == "on"
 		bq = bq.SetConfig(cfg)
 
 		answ, err := bq.Ask(inp.Question)
