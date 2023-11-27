@@ -5,6 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add flag to show or hide matched texts (#18)
+- Update web GUI form with GET data (#17)
+
 ## [v0.0.3] - 2023-11-23
 
 - Add steps needed for Kubernetes deployment (#16)
@@ -44,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 This document follows [changelog guidelines]
 
+[v0.0.4]: https://github.com/gnames/bhlquest/compare/v0.0.3...v0.0.4
+[v0.0.3]: https://github.com/gnames/bhlquest/compare/v0.0.2...v0.0.3
 [v0.0.2]: https://github.com/gnames/bhlquest/compare/v0.0.1...v0.0.2
 [v0.0.1]: https://github.com/gnames/bhlquest/compare/v0.0.0...v0.0.1
 [v0.0.0]: https://github.com/gnames/bhlquest/tree/v0.0.0
