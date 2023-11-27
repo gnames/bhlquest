@@ -81,6 +81,9 @@ func addFuncs(tmpl *template.Template) {
 		"formatFloat": func(f float64) string {
 			return fmt.Sprintf("%03f", f)
 		},
+		"upper": func(s string) string {
+			return strings.ToUpper(s)
+		},
 		"formatText": func(s string) template.HTML {
 			res := strings.Replace(template.HTMLEscapeString(s), "\n", "<br>", -1)
 			return template.HTML(res)

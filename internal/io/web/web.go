@@ -15,10 +15,15 @@ type Duration struct {
 
 // Data contains information needed to render web-pages.
 type Data struct {
-	Page    string
-	Output  *answer.Answer
-	Format  string
-	Version string
+	Page           string
+	Output         *answer.Answer
+	Question       string
+	Format         string
+	FormatOptions  []string
+	MaxResultsNum  int
+	ScoreThreshold float64
+	WithText       bool
+	Version        string
 }
 
 type formInput struct {
@@ -32,9 +37,12 @@ type formInput struct {
 func homeGET(bq bhlquest.BHLQuest) func(echo.Context) error {
 	return func(c echo.Context) error {
 		data := Data{
-			Page:    "home",
-			Format:  "html",
-			Version: bhlquest.GetVersion().Version,
+			Page:           "home",
+			Format:         "html",
+			FormatOptions:  []string{"html", "json"},
+			MaxResultsNum:  5,
+			ScoreThreshold: 0.4,
+			Version:        bhlquest.GetVersion().Version,
 		}
 
 		inp := new(formInput)
@@ -58,7 +66,11 @@ func homeGET(bq bhlquest.BHLQuest) func(echo.Context) error {
 			return err
 		}
 		data.Output = &answ
+		data.Question = inp.Question
 		data.Format = inp.Format
+		data.MaxResultsNum = inp.MaxResultsNum
+		data.ScoreThreshold = inp.ScoreThreshold
+		data.WithText = inp.WithText == "on"
 
 		switch data.Format {
 		case "json":

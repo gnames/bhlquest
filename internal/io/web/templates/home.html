@@ -7,21 +7,23 @@
       <div>
         <label for='format'>Output format</label>
         <select id='format' name='format'>
-          <option value='html'>HTML</option>
-          <option value='json'>JSON</option>
+          {{ range .FormatOptions }}
+          <option value='{{ . }}' {{ if eq . $.Format}}selected{{ end }}>{{ upper . }}</option>
+          {{ end }}
         </select>
         &nbsp;&nbsp
         <label for='max_result'>Max results number</label>
-        <input id='max_results' name='max_results' type='number' value='5' min='1' max='20'/>
+        <input id='max_results' name='max_results' type='number' value='{{ .MaxResultsNum }}' min='1' max='20'/>
         &nbsp;&nbsp
          <label for='score_threshold'>Score min threshold</label>
-         <input id='score_threshold' name='score_threshold' type='number' step='0.1' min='0.1' max='1.0' value='0.4'>
+         <input id='score_threshold' name='score_threshold' type='number' step='0.1' min='0.1' max='1.0' value='{{ .ScoreThreshold }}'>
         &nbsp;&nbsp;
         <label for='with_text'>Show Text</label>
-        <input id='with_text' name='with_text' type='checkbox'/>
+        <input id='with_text' name='with_text' type='checkbox'
+         {{ if .WithText }}checked{{ end }}/>
 
       </div>
-      <textarea cols='24' name='question' rows='2' autofocus placeholder="Do Bald Eagles migrate?"></textarea>
+      <textarea cols='24' name='question' rows='2' autofocus placeholder="Do Bald Eagles migrate?">{{ .Question }}</textarea>
       <button>Ask</button>
     </form>
   </div>
