@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.6] - 2023-11-30
+
+### Added v0.0.6
+
+- Use model with bigger vectors
+
 ## [v0.0.5] - 2023-11-29
 
 ### Added v0.0.5

@@ -31,7 +31,7 @@ CREATE TABLE chunks (
 	page_id bigint,
 	page_id_end bigint,
 	item_offset int,
-	embedding vector(384)
+	embedding vector(768)
 	)		
 	`
 	_, err = e.db.Exec(cxt, q)
@@ -80,6 +80,19 @@ func (e *embedio) save(chunks []text.Chunk) error {
 		return err
 	}
 	return nil
+}
+
+func (e *embedio) createIndex() error {
+	ctx := context.Background()
+	q := `
+CREATE INDEX
+	ON chunks
+	USING ivfflat (embedding vector_cosine_ops)
+	WITH (lists = 3000);
+`
+
+	_, err := e.db.Exec(ctx, q)
+	return err
 }
 
 func (e *embedio) query(emb []float32) ([]text.Chunk, error) {

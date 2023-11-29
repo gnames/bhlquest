@@ -12,12 +12,6 @@ _test
 *.test
 *.prof
 
-# Binary files (images, videos, etc.)
-*.jpg
-*.jpeg
-*.png
-*.gif
-
 # Cache files
 .cache/
 

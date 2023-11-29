@@ -81,7 +81,8 @@ func (e *embedio) Populate(itemIDs []uint) error {
 
 	saveWg.Wait()
 
-	return nil
+	slog.Info("Creating index for embedding field.")
+	return e.createIndex()
 }
 
 func (e *embedio) LastItemID() uint {
@@ -159,6 +160,7 @@ func (e *embedio) saveStream(
 		e.save(ch)
 
 	}
+	fmt.Fprint(os.Stderr, "\r")
 }
 
 func incrLog(start time.Time, total, count, itemID, incr int) int {
