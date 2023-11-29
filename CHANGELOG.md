@@ -5,12 +5,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.5] - 2023-11-29
+
+### Added v0.0.5
+
+- Example questions for the web GUI (#19)
+
 ## [v0.0.4] - 2023-11-27
 
-- Add flag to show or hide matched texts (#18)
+### Added v0.0.4
+
+- Flag to show or hide matched texts (#18)
 - Update web GUI form with GET data (#17)
 
 ## [v0.0.3] - 2023-11-23
+
+### Added v0.0.3
 
 - Add steps needed for Kubernetes deployment (#16)
 - Add web GUI (#15)
@@ -22,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add max-results and score-threshold parameters to API (#14)
 - Add parameters for maximum number of returns and score threshold (#13)
 - Change limiting factor from main_taxa to main_class of an item (#12)
-- Add better hanling of initiation process (#11)
+- Add better handling of initiation process (#11)
 - Add text of matched chunk to the output (if possible) (#10)
 - Add an option to limit BHL items intake by a list of taxa (#9)
 
@@ -34,21 +44,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ask a question and get an answer (#7).
 - Embed chunks and save to the database (#6).
 - Break items into chunks (#5).
-- Connect to llmutil RESTful service (#4).
-- Create database reset with pgvector for the data (#3).
-- Return list of item ids (#2).
+- Connect to `llmutil` RESTful service (#4).
+- Create database reset with `pgvector` for the data (#3).
+- Return list of item IDs (#2).
 
 
 ## [v0.0.0] - 2023-11-11
 
 ### Added v0.0.0
 
-- General "plumbing": filestructure makefile etc (#1)
+- General "plumbing": files structure, makefile etc. (#1)
 
 ## Footnotes
 
 This document follows [changelog guidelines]
 
+[v0.0.5]: https://github.com/gnames/bhlquest/compare/v0.0.4...v0.0.5
 [v0.0.4]: https://github.com/gnames/bhlquest/compare/v0.0.3...v0.0.4
 [v0.0.3]: https://github.com/gnames/bhlquest/compare/v0.0.2...v0.0.3
 [v0.0.2]: https://github.com/gnames/bhlquest/compare/v0.0.1...v0.0.2

@@ -34,6 +34,25 @@
     {{ range .Output.Results }}
       {{ template "results" . }}
     {{ end }}
+  {{ else }}
+  <div id='examples-table'>
+    <table>
+    <tr>
+     <td>
+       <div><a href="/?format=html&max_results=5&score_threshold=0.4&question=Do+Bald+Eagles+migrate%3F">Do Bald Eagles migrate?</a></div>
+     </td>
+     <td>
+       <div><a href="/?format=html&max_results=5&score_threshold=0.4&with_text=on&question=Do+woodpeckers+suffer+from+concussions%3F">Do woodpeckers suffer from concussions?</a></div>
+     </td>
+    <tr>
+     <td>
+       <div><a href="/?format=html&max_results=5&score_threshold=0.4&with_text=on&question=What+does+a+cassowary+eat%3F">What does a cassowary eat?</a></div>
+     </td>
+     <td>
+       <div><a href="/?format=html&max_results=5&score_threshold=0.4&with_text=on&question=What+adaptations+allow+hummingbirds+to+hover%3F">What adaptations allow humming birds to hover?</a></div>
+     </td>
+    </table>
+  </div>
   {{ end }}
 
 {{ end }}

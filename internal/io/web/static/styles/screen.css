@@ -120,6 +120,28 @@ label {
   padding: 0px;
   position: relative; }
 
+#examples-table{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#examples-table table {
+  width: 80%;
+}
+
+#examples-table td {
+  text-align: center;
+  padding: 1em;
+}
+
+#examples-table td div {
+  color: #666;
+  border: 1px solid #666;
+  border-radius: 206px;
+  padding: 1em;
+}
+
 #SiteNavigation li {
   border: 1px solid transparent;
   display: block;
@@ -317,8 +339,10 @@ p.separator {
 }
 
 #form-panel button {
+  font-size: 1.2em;
   border 1px solid white;
-  border-radius: 3px;
+  padding: 0.4em;
+  border-radius: 13px;
 }
 
 input[type="text"], input[type="email"], input[type="file"], textarea {
