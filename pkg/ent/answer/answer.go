@@ -7,6 +7,11 @@ package answer
 type Answer struct {
 	// Meta contains metadata about the request.
 	Meta `json:"metadata"`
+
+	// Summary contains an answer from LLM created from the
+	// content of the results.
+	Summary string `json:"summary"`
+
 	// Results is a list of pages containing the answers.
 	Results []Result `json:"results"`
 }
@@ -58,4 +63,8 @@ type Result struct {
 
 	// Text respresents the actual string that was used for matching by AI.
 	Text string `json:"text,omitempty"`
+
+	// PageText contains more text that Text, allowing to create
+	// a better summary.
+	PageText string `json:"-"`
 }

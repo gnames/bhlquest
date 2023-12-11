@@ -12,18 +12,21 @@ import (
 	"github.com/gnames/bhlquest/pkg/ent/answer"
 	"github.com/gnames/bhlquest/pkg/ent/bhln"
 	"github.com/gnames/bhlquest/pkg/ent/embed"
+	"github.com/gnames/bhlquest/pkg/ent/gpt"
 	"github.com/gnames/gnlib/ent/gnvers"
 )
 
 type Components struct {
 	BHLNames bhln.BHLN
 	Embed    embed.Embed
+	GPT      gpt.GPT
 }
 
 type bhlquest struct {
 	cfg  config.Config
 	bhln bhln.BHLN
 	emb  embed.Embed
+	gpt  gpt.GPT
 }
 
 func New(
@@ -34,6 +37,7 @@ func New(
 		cfg:  cfg,
 		bhln: cmp.BHLNames,
 		emb:  cmp.Embed,
+		gpt:  cmp.GPT,
 	}
 
 	return res
@@ -121,6 +125,12 @@ func (bq bhlquest) Ask(q string) (answer.Answer, error) {
 	res.Meta.Question = q
 	res.Meta.QueryTime = duration
 	res.Meta.Version = GetVersion().Version
+	if bq.cfg.WithSummary {
+		sum, err := bq.gpt.Summary(res)
+		if err == nil {
+			res.Summary = sum
+		}
+	}
 	return res, nil
 }
 

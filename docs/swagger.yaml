@@ -13,6 +13,11 @@ definitions:
         items:
           $ref: '#/definitions/answer.Result'
         type: array
+      summary:
+        description: |-
+          Summary contains an answer from LLM created from the
+          content of the results.
+        type: string
     type: object
   answer.Meta:
     description: Meta includes information such as the time taken to process the query.

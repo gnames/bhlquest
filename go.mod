@@ -11,6 +11,7 @@ require (
 	github.com/labstack/echo/v4 v4.11.3
 	github.com/lmittmann/tint v1.0.3
 	github.com/pgvector/pgvector-go v0.1.1
+	github.com/sashabaranov/go-openai v1.17.9
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/cobra-cli v1.3.0
 	github.com/spf13/viper v1.10.1

@@ -1,3 +1,7 @@
+## OpenaiAPIKey is required for connection to OpenAI API
+#
+# OpenaiAPIKey: 123456
+
 ## BHLDir contains dump of BHL texts.
 #
 # BHLDir: /opt/bhl

@@ -50,21 +50,21 @@ func (t *text) TextToChunks(itemID uint) ([]Chunk, error) {
 	return t.pagesToChunks(pages), nil
 }
 
-func (t *text) ChunkText(cnk Chunk) string {
+func (t *text) ChunkText(cnk Chunk) (string, string) {
 	pages, err := t.stg.Pages(cnk.ItemID)
 	if err != nil {
-		return ""
+		return "", ""
 	}
 	txt := combinePages(pages)
 	offset := int(cnk.Start)
 	if len(txt) <= offset {
-		return ""
+		return "", ""
 	}
 	res := txt[offset:]
 	if len(res) < 1000 {
-		return res
+		return res, txt
 	}
-	return res[:1000]
+	return res[:1000], txt
 }
 
 func (t *text) pagesToChunks(pages []storage.Page) []Chunk {

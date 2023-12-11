@@ -1,6 +1,9 @@
 package config
 
 type Config struct {
+	// OpenaiAPIKey a key to OpenAI API
+	OpenaiAPIKey string
+
 	// BHLDir is the path to BHL items and OCRed texts.
 	BHLDir string
 
@@ -44,6 +47,10 @@ type Config struct {
 	// WithoutConfirm when true, remves confirmation dialogs.
 	WithoutConfirm bool
 
+	// WithSummary adds LLM-generated summary generated from
+	// received BHL data.
+	WithSummary bool
+
 	// WithRebuildDb flag is true if the bhlquest database needs to
 	// be rebuilt from scratch.
 	WithRebuildDb bool
@@ -54,6 +61,12 @@ type Config struct {
 }
 
 type Option func(*Config)
+
+func OptOpenaiAPIKey(s string) Option {
+	return func(cfg *Config) {
+		cfg.OpenaiAPIKey = s
+	}
+}
 
 func OptBHLDir(s string) Option {
 	return func(cfg *Config) {
@@ -158,6 +171,7 @@ func New(opts ...Option) Config {
 		APIDocURL:      "https://apidoc.globalnames.org/bhlquest",
 		ScoreThreshold: 0.4,
 		MaxResultsNum:  5,
+		WithSummary:    true,
 	}
 	for _, opt := range opts {
 		opt(&res)

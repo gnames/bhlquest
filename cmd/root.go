@@ -45,14 +45,15 @@ var (
 // fConfig purpose is to achieve automatic import of data from the
 // configuration file, if it exists.
 type configData struct {
-	BHLDir     string
-	LlmUtilURL string
-	DbHost     string
-	DbUser     string
-	DbPass     string
-	DbBHLQuest string
-	DbBHLNames string
-	PortREST   int
+	OpenaiAPIKey string
+	BHLDir       string
+	LlmUtilURL   string
+	DbHost       string
+	DbUser       string
+	DbPass       string
+	DbBHLQuest   string
+	DbBHLNames   string
+	PortREST     int
 }
 
 // rootCmd represents the base command when called without any subcommands
@@ -104,6 +105,7 @@ func initConfig() {
 	viper.AddConfigPath(configDir)
 	viper.SetConfigName(configFile)
 
+	_ = viper.BindEnv("OpenaiAPIKey", "OPENAI_API_KEY")
 	_ = viper.BindEnv("BHLDir", "BHLQ_BHL_DIR")
 	_ = viper.BindEnv("LlmUtilURL", "BHLQ_LLM_UTIL_URL")
 	_ = viper.BindEnv("DbHost", "BHLQ_DB_HOST")
@@ -141,6 +143,9 @@ func getOpts() {
 		os.Exit(1)
 	}
 
+	if cfgCli.OpenaiAPIKey != "" {
+		opts = append(opts, config.OptOpenaiAPIKey(cfgCli.OpenaiAPIKey))
+	}
 	if cfgCli.BHLDir != "" {
 		opts = append(opts, config.OptBHLDir(cfgCli.BHLDir))
 	}

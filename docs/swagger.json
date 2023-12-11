@@ -139,6 +139,10 @@
                     "items": {
                         "$ref": "#/definitions/answer.Result"
                     }
+                },
+                "summary": {
+                    "description": "Summary contains an answer from LLM created from the\ncontent of the results.",
+                    "type": "string"
                 }
             }
         },
