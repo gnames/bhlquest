@@ -64,7 +64,7 @@ type Result struct {
 	// Text respresents the actual string that was used for matching by AI.
 	Text string `json:"text,omitempty"`
 
-	// PageText contains more text that Text, allowing to create
+	// TextExt contains more text that Text, allowing to create
 	// a better summary.
-	PageText string `json:"-"`
+	TextExt string `json:"-"`
 }

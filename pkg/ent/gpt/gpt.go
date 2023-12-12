@@ -2,9 +2,11 @@ package gpt
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/gnames/bhlquest/pkg/config"
 	"github.com/gnames/bhlquest/pkg/ent/answer"
+	"github.com/gnames/gnlib"
 )
 
 type gpt struct {
@@ -25,7 +27,12 @@ func (g *gpt) Summary(inp answer.Answer) (string, error) {
 	if len(inp.Results) == 0 {
 		return res, nil
 	}
-	data := inp.Results[0].PageText
+
+	texts := gnlib.Map(inp.Results, func(res answer.Result) string {
+		return res.TextExt
+	})
+	data := strings.Join(texts, "\n\n")
+
 	question := inp.Meta.Question
 	userPrompt := fmt.Sprintf(Prompts["summary"], question, data)
 	resp, err := g.api.Query(Prompts["system"], userPrompt)

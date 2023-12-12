@@ -101,11 +101,11 @@ func (e *embedio) Query(emb []float32) (answer.Answer, error) {
 	}
 	var data []answer.Result
 	for i := range chs {
-		var txt, page string
+		var txt, txtExt string
 		l := len(chs[i].PageIDs)
 
 		if e.cfg.WithText {
-			txt, page = e.txt.ChunkText(chs[i])
+			txt, txtExt = e.txt.ChunkText(chs[i])
 		}
 
 		d := answer.Result{
@@ -118,8 +118,8 @@ func (e *embedio) Query(emb []float32) (answer.Answer, error) {
 				"https://www.biodiversitylibrary.org/page/",
 				chs[i].PageIDs[0],
 			),
-			Text:     txt,
-			PageText: page,
+			Text:    txt,
+			TextExt: txtExt,
 		}
 		data = append(data, d)
 	}
