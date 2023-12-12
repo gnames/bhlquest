@@ -26,7 +26,8 @@ func (g *gpt) Summary(inp answer.Answer) (string, error) {
 		return res, nil
 	}
 	data := inp.Results[0].PageText
-	userPrompt := fmt.Sprintf(Prompts["summary"], data)
+	question := inp.Meta.Question
+	userPrompt := fmt.Sprintf(Prompts["summary"], question, data)
 	resp, err := g.api.Query(Prompts["system"], userPrompt)
 
 	if err != nil {

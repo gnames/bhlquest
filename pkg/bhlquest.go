@@ -125,7 +125,7 @@ func (bq bhlquest) Ask(q string) (answer.Answer, error) {
 	res.Meta.Question = q
 	res.Meta.QueryTime = duration
 	res.Meta.Version = GetVersion().Version
-	if bq.cfg.WithSummary {
+	if bq.cfg.WithSummary && bq.cfg.WithText {
 		sum, err := bq.gpt.Summary(res)
 		if err == nil {
 			res.Summary = sum

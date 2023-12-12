@@ -22,7 +22,6 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
 
@@ -45,7 +44,6 @@ var serveCmd = &cobra.Command{
 		}
 		bq := bhlquestFactory()
 		web.Run(bq)
-		fmt.Println("serve called")
 	},
 }
 

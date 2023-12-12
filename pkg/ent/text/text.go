@@ -57,14 +57,24 @@ func (t *text) ChunkText(cnk Chunk) (string, string) {
 	}
 	txt := combinePages(pages)
 	offset := int(cnk.Start)
+	pageOffset := offset - 500
+	if pageOffset < 0 {
+		pageOffset = 0
+	}
+
 	if len(txt) <= offset {
 		return "", ""
 	}
 	res := txt[offset:]
-	if len(res) < 1000 {
-		return res, txt
+	page := txt[pageOffset:]
+	if len(page) >= 2000 {
+		page = page[:2000]
 	}
-	return res[:1000], txt
+
+	if len(res) < 1000 {
+		return res, page
+	}
+	return res[:1000], page
 }
 
 func (t *text) pagesToChunks(pages []storage.Page) []Chunk {

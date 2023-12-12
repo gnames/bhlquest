@@ -40,7 +40,6 @@ func (s *storageio) pathToPages(
 	for i := range es {
 		name := es[i].Name()
 		if filepath.Ext(name) != ".txt" {
-			fmt.Println("BAD")
 			continue
 		}
 		pageID, err := nameToPageID(es[i].Name())

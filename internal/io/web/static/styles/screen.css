@@ -396,6 +396,13 @@ form span {
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   border-radius: 6px; }
 
+.summary {
+  color: #333;
+  font-size: 1em;
+  margin: 1em 1em 1em 1em;
+  line-height: 1.5em;
+}
+
 #options {
   margin-top: 1em;
 }

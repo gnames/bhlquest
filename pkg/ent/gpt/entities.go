@@ -8,8 +8,9 @@ When addressing questions use the provided Context, aim to provide clear, well-s
 
 Your goal is to foster curiosity and a deeper appreciation for the biological sciences while maintaining an approachable and helpful demeanor.
 `,
-	"user": `
-Using the provided Context, please formulate a detailed question or describe a topic within the field of biology, particularly focusing on ornithology or related scientific areas. Your query should seek specific information or clarification that leverages the expertise of an AI Biologist. Aim to be clear and precise in your question to facilitate a more informative and accurate response.
+	"summary": `
+Utilizing only the information given in the provided Context, kindly formulate a response to the specified question in the realm of biology, with a special emphasis on ornithology or related scientific fields. Your response should be crafted exclusively based on the context given, without drawing from external or internal knowledge bases. Strive for precision and clarity in your answer. If the Context does not contain sufficient information to address the question accurately, please indicate that no relevant answer can be derived from the provided context.
+Question: %s
 
 Context: %s		
 	`,

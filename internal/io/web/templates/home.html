@@ -30,6 +30,12 @@
 
   {{ if .Output }}
     <h4>Q: {{ .Output.Meta.Question }}</h4>
+    {{ if .Output.Summary }}
+    <h3>Summary</h3>
+    <div class='summary'>
+      {{ .Output.Summary }}
+    </div>
+    {{ end }}
     Number of results: {{ len .Output.Results }}
     {{ range .Output.Results }}
       {{ template "results" . }}
