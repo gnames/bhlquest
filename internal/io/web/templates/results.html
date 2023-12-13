@@ -1,7 +1,12 @@
 {{ define "results" }}
 <div class='result'>
   <div class='result-data'>
-    <p>Score: {{ formatFloat .Score }}<p>
+    <p>
+      Score: {{ formatFloat .Score }}
+      {{ if .CrossScore}}
+      CrossScore: {{ formatFloat .CrossScore }}
+      {{ end }}
+    <p>
     <p><a href='{{ .Outlink }}'>{{ .Outlink }}</a></p>
     {{ if .Text }}
       <div class='result-text'>{{ .Text | formatText }}</div>

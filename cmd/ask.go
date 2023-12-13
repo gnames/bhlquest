@@ -41,7 +41,7 @@ var askCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		flags := []flagFunc{scoreThresholdFlag, maxResultsFlag, withTextFlag}
+		flags := []flagFunc{scoreThresholdFlag, maxResultsFlag}
 		for _, v := range flags {
 			v(cmd)
 		}
@@ -69,10 +69,5 @@ func init() {
 	askCmd.Flags().Float64P(
 		"score-threshold", "s", 0,
 		"results with lower score will be ignored",
-	)
-
-	askCmd.Flags().BoolP(
-		"text-with-results", "t", false,
-		"shows matched text in results in addition to BHL link",
 	)
 }

@@ -77,8 +77,6 @@ func ask(bq bhlquest.BHLQuest) func(c echo.Context) error {
 			cfg.ScoreThreshold = 1 - thr
 		}
 
-		cfg.WithText = c.QueryParam("with-text") == "true"
-
 		bq = bq.SetConfig(cfg)
 
 		answ, err := bq.Ask(q)

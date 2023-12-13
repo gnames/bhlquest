@@ -31,6 +31,9 @@ func (g *gpt) Summary(inp answer.Answer) (string, error) {
 	texts := gnlib.Map(inp.Results, func(res answer.Result) string {
 		return res.TextExt
 	})
+	if len(texts) >= 5 {
+		texts = texts[:5]
+	}
 	data := strings.Join(texts, "\n\n")
 
 	question := inp.Meta.Question

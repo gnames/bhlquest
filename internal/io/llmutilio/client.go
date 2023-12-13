@@ -55,6 +55,51 @@ func (l *llmutilio) ping() error {
 	return nil
 }
 
+func (l *llmutilio) crossEmbed(
+	pairs [][]string,
+) ([]float64, error) {
+	ctx := context.Background()
+	url := fmt.Sprintf("%scross_embed", l.url)
+	for i, v := range pairs {
+		if len(v) != 2 {
+			err := fmt.Errorf("The %dth strings pair has %d elements instead", i, len(v))
+			return nil, err
+		}
+	}
+	bs, err := l.enc.Encode(crossPayload{Texts: pairs})
+	if err != nil {
+		return nil, err
+	}
+	pld := bytes.NewReader(bs)
+	request, err := http.NewRequestWithContext(ctx, http.MethodPost, url, pld)
+	if err != nil {
+		err = fmt.Errorf("cannot create cross-embed request: %w", err)
+		return nil, err
+	}
+	request.Header.Set("Content-Type", "application/json")
+
+	resp, err := l.client.Do(request)
+	if err != nil {
+		err = fmt.Errorf("cannot get embed response: %w", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	bs, err = io.ReadAll(resp.Body)
+	if err != nil {
+		err = fmt.Errorf("cannot read cross-embed body: %w", err)
+		return nil, err
+	}
+	var res []float64
+	err = l.enc.Decode(bs, &res)
+	if err != nil {
+		err = fmt.Errorf("cannot decode cross-embed body: %w", err)
+		return nil, err
+	}
+
+	return res, nil
+}
+
 func (l *llmutilio) embed(texts []string) ([][]float32, error) {
 	ctx := context.Background()
 	url := fmt.Sprintf("%sembed", l.url)

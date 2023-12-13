@@ -93,6 +93,10 @@ func (e *embedio) Embed(texts []string) ([][]float32, error) {
 	return e.llm.EmbedTexts(texts)
 }
 
+func (e *embedio) CrossEmbed(pairs [][]string) ([]float64, error) {
+	return e.llm.CrossEmbedPairs(pairs)
+}
+
 func (e *embedio) Query(emb []float32) (answer.Answer, error) {
 	var res answer.Answer
 	chs, err := e.query(emb)
@@ -104,9 +108,7 @@ func (e *embedio) Query(emb []float32) (answer.Answer, error) {
 		var txt, txtExt string
 		l := len(chs[i].PageIDs)
 
-		if e.cfg.WithText {
-			txt, txtExt = e.txt.ChunkText(chs[i])
-		}
+		txt, txtExt = e.txt.ChunkText(chs[i])
 
 		d := answer.Result{
 			ItemID:      chs[i].ItemID,

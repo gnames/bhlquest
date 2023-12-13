@@ -1,10 +1,12 @@
 package bhlquest
 
 import (
+	"cmp"
 	"errors"
 	"fmt"
 	"log/slog"
 	"os"
+	"slices"
 	"strings"
 	"time"
 
@@ -13,6 +15,7 @@ import (
 	"github.com/gnames/bhlquest/pkg/ent/bhln"
 	"github.com/gnames/bhlquest/pkg/ent/embed"
 	"github.com/gnames/bhlquest/pkg/ent/gpt"
+	"github.com/gnames/gnlib"
 	"github.com/gnames/gnlib/ent/gnvers"
 )
 
@@ -121,14 +124,43 @@ func (bq bhlquest) Ask(q string) (answer.Answer, error) {
 	if err != nil {
 		return res, err
 	}
+	if bq.cfg.WithCrossEmbed {
+		cePairs := gnlib.Map(
+			res.Results, func(r answer.Result) []string {
+				return []string{res.Question, r.TextExt}
+			},
+		)
+		ceScore, err := bq.emb.CrossEmbed(cePairs)
+		if err != nil {
+			slog.Warn("Cross-embedding failed.")
+		}
+		for i := range res.Results {
+			res.Results[i].CrossScore = ceScore[i]
+		}
+		slices.SortStableFunc(
+			res.Results,
+			func(a, b answer.Result) int {
+				res := cmp.Compare(b.CrossScore, a.CrossScore)
+				if res != 0 {
+					return res
+				}
+				return cmp.Compare(b.Score, a.Score)
+			},
+		)
+	}
+	if len(res.Results) > bq.cfg.MaxResultsNum {
+		res.Results = res.Results[:bq.cfg.MaxResultsNum]
+	}
 	duration := time.Since(start).Seconds()
 	res.Meta.Question = q
 	res.Meta.QueryTime = duration
 	res.Meta.Version = GetVersion().Version
-	if bq.cfg.WithSummary && bq.cfg.WithText {
+	if bq.cfg.WithSummary {
 		sum, err := bq.gpt.Summary(res)
 		if err == nil {
 			res.Summary = sum
+		} else {
+			slog.Warn("Summary failed: %s", err)
 		}
 	}
 	return res, nil

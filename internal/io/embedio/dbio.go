@@ -108,7 +108,7 @@ SELECT id, item_id, page_id, page_id_end, item_offset,
 	rows, err := e.db.Query(ctx, q,
 		pgvector.NewVector(emb),
 		e.cfg.ScoreThreshold,
-		e.cfg.MaxResultsNum,
+		20,
 	)
 	if err != nil {
 		panic(err)

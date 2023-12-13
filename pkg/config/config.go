@@ -55,9 +55,9 @@ type Config struct {
 	// be rebuilt from scratch.
 	WithRebuildDb bool
 
-	// WithText is a flag that control appearance of matched texts with
-	// the results. If the flag is false, the text does not appear.
-	WithText bool
+	// WithCrossEmbed flag controls use of Cross-Embed comparison
+	// of a question with results.
+	WithCrossEmbed bool
 }
 
 type Option func(*Config)
@@ -152,12 +152,6 @@ func OptWithRebuildDb(b bool) Option {
 	}
 }
 
-func OptWithText(b bool) Option {
-	return func(cfg *Config) {
-		cfg.WithText = b
-	}
-}
-
 func New(opts ...Option) Config {
 	res := Config{
 		BHLDir:         "/opt/bhl/",
@@ -172,6 +166,7 @@ func New(opts ...Option) Config {
 		ScoreThreshold: 0.4,
 		MaxResultsNum:  5,
 		WithSummary:    true,
+		WithCrossEmbed: false,
 	}
 	for _, opt := range opts {
 		opt(&res)

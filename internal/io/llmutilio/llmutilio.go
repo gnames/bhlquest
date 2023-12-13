@@ -21,6 +21,10 @@ type embedPayload struct {
 	Texts []string `json:"texts"`
 }
 
+type crossPayload struct {
+	Texts [][]string `json:"texts"`
+}
+
 func New(cfg config.Config) (llmutil.LlmUtil, error) {
 	res := &llmutilio{
 		cfg: cfg,
@@ -48,6 +52,14 @@ func (l *llmutilio) Embed(
 	return res, nil
 }
 
-func (l *llmutilio) EmbedTexts(texts []string) ([][]float32, error) {
+func (l *llmutilio) EmbedTexts(
+	texts []string,
+) ([][]float32, error) {
 	return l.embed(texts)
+}
+
+func (l *llmutilio) CrossEmbedPairs(
+	pairs [][]string,
+) ([]float64, error) {
+	return l.crossEmbed(pairs)
 }
