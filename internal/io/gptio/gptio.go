@@ -14,7 +14,7 @@ type api struct {
 
 func New(cfg config.Config) *api {
 	res := api{
-		model:  openai.GPT3Dot5Turbo,
+		model:  openai.GPT3Dot5Turbo1106,
 		client: openai.NewClient(cfg.OpenaiAPIKey),
 	}
 	return &res
