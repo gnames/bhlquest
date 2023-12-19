@@ -5,9 +5,9 @@ import (
 	"os"
 
 	"github.com/gnames/bhlquest/internal/io/bhlnio"
-	"github.com/gnames/bhlquest/internal/io/embedio"
 	"github.com/gnames/bhlquest/internal/io/gptio"
 	"github.com/gnames/bhlquest/internal/io/llmutilio"
+	"github.com/gnames/bhlquest/internal/io/qdrant"
 	"github.com/gnames/bhlquest/internal/io/storageio"
 	bhlquest "github.com/gnames/bhlquest/pkg"
 	"github.com/gnames/bhlquest/pkg/config"
@@ -31,7 +31,7 @@ func bhlquestFactory() bhlquest.BHLQuest {
 		slog.Error("No connection to llmutil", "error", err)
 		os.Exit(1)
 	}
-	emb, err := embedio.New(cfg, stg, llm)
+	emb, err := qdrant.New(cfg, stg, llm)
 	if err != nil {
 		slog.Error("No connection to embedding db", "error", err)
 		os.Exit(1)

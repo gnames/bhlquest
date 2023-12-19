@@ -10,6 +10,16 @@ type Config struct {
 	// LlmUtilURL is the URL to the llmutil service.
 	LlmUtilURL string
 
+	// QdrantHost is the host for creation qdrant grpc connection.
+	QdrantHost string
+
+	// QdrantSegmentsNum sets the number of segmens for Qdrant.
+	QdrantSegmentsNum uint64
+
+	// VectorSize sets the number of dimentions for embeding
+	// vectors.
+	VectorSize uint64
+
 	// DbHost is the database host.
 	DbHost string
 
@@ -77,6 +87,18 @@ func OptBHLDir(s string) Option {
 func OptLlmUtilURL(s string) Option {
 	return func(cfg *Config) {
 		cfg.LlmUtilURL = s
+	}
+}
+
+func OptQdrantHost(s string) Option {
+	return func(cfg *Config) {
+		cfg.QdrantHost = s
+	}
+}
+
+func OptVectorSize(i uint64) Option {
+	return func(cfg *Config) {
+		cfg.VectorSize = i
 	}
 }
 
@@ -154,19 +176,22 @@ func OptWithRebuildDb(b bool) Option {
 
 func New(opts ...Option) Config {
 	res := Config{
-		BHLDir:         "/opt/bhl/",
-		LlmUtilURL:     "http://0.0.0.0:8000/api/v1/",
-		DbHost:         "0.0.0.0",
-		DbUser:         "postgres",
-		DbPass:         "postgres",
-		DbBHLQuest:     "bhlquest",
-		DbBHLNames:     "bhlnames",
-		Port:           8555,
-		APIDocURL:      "https://apidoc.globalnames.org/bhlquest",
-		ScoreThreshold: 0.4,
-		MaxResultsNum:  5,
-		WithSummary:    true,
-		WithCrossEmbed: false,
+		BHLDir:            "/opt/bhl/",
+		LlmUtilURL:        "http://0.0.0.0:8000/api/v1/",
+		QdrantHost:        "0.0.0.0:6334",
+		QdrantSegmentsNum: 2,
+		VectorSize:        768,
+		DbHost:            "0.0.0.0",
+		DbUser:            "postgres",
+		DbPass:            "postgres",
+		DbBHLQuest:        "bhlquest",
+		DbBHLNames:        "bhlnames",
+		Port:              8555,
+		APIDocURL:         "https://apidoc.globalnames.org/bhlquest",
+		ScoreThreshold:    0.4,
+		MaxResultsNum:     5,
+		WithSummary:       true,
+		WithCrossEmbed:    false,
 	}
 	for _, opt := range opts {
 		opt(&res)

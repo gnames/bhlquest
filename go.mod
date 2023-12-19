@@ -11,12 +11,14 @@ require (
 	github.com/labstack/echo/v4 v4.11.3
 	github.com/lmittmann/tint v1.0.3
 	github.com/pgvector/pgvector-go v0.1.1
+	github.com/qdrant/go-client v1.7.0
 	github.com/sashabaranov/go-openai v1.17.9
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/cobra-cli v1.3.0
 	github.com/spf13/viper v1.10.1
 	github.com/swaggo/echo-swagger v1.4.1
 	github.com/swaggo/swag v1.16.2
+	google.golang.org/grpc v1.47.0
 )
 
 require (
@@ -31,6 +33,7 @@ require (
 	github.com/go-openapi/spec v0.20.4 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
@@ -65,6 +68,8 @@ require (
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.7.0 // indirect
+	google.golang.org/genproto v0.0.0-20211208223120-3a66f561d7aa // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/ini.v1 v1.66.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
