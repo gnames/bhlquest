@@ -61,10 +61,6 @@ type Config struct {
 	// received BHL data.
 	WithSummary bool
 
-	// WithRebuildDb flag is true if the bhlquest database needs to
-	// be rebuilt from scratch.
-	WithRebuildDb bool
-
 	// WithCrossEmbed flag controls use of Cross-Embed comparison
 	// of a question with results.
 	WithCrossEmbed bool
@@ -165,12 +161,6 @@ func OptMaxResultsNum(i int) Option {
 func OptWithoutConfirm(b bool) Option {
 	return func(cfg *Config) {
 		cfg.WithoutConfirm = b
-	}
-}
-
-func OptWithRebuildDb(b bool) Option {
-	return func(cfg *Config) {
-		cfg.WithRebuildDb = b
 	}
 }
 

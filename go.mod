@@ -5,12 +5,11 @@ go 1.21
 require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/gnames/gnfmt v0.4.3
-	github.com/gnames/gnlib v0.27.0
+	github.com/gnames/gnlib v0.30.0
 	github.com/gnames/gnsys v0.2.3
 	github.com/jackc/pgx/v5 v5.5.0
 	github.com/labstack/echo/v4 v4.11.3
 	github.com/lmittmann/tint v1.0.3
-	github.com/pgvector/pgvector-go v0.1.1
 	github.com/qdrant/go-client v1.7.0
 	github.com/sashabaranov/go-openai v1.17.9
 	github.com/spf13/cobra v1.8.0

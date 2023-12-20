@@ -35,7 +35,7 @@ var initCmd = &cobra.Command{
 	Long:  `Makes database, embeds BHL items and saves them.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		flags := []flagFunc{classesFlag, taxonsFlag, noConfirmFlag, rebuildDbFlag}
+		flags := []flagFunc{classesFlag, taxonsFlag, noConfirmFlag}
 		for _, v := range flags {
 			v(cmd)
 		}
@@ -60,9 +60,5 @@ func init() {
 	initCmd.Flags().StringP(
 		"taxons", "t", "",
 		`limit intake to main taxons ofitems, e.g. "-t 'Aves,Mammalia'".`,
-	)
-	initCmd.Flags().BoolP(
-		"rebuild-db", "r", false,
-		"deletes database and starts it from scratch",
 	)
 }

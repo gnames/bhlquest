@@ -5,11 +5,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v.0.0.8] - 2023-12-20 Wed
+
+### Added v0.0.8
+
+- Add Qdrant for data initiation (#23)
+- Add Qdrant for querying (#21)
+- Add Cross-Embedding (#22)
+
 ## [v0.0.7] - 2023-12-13 Wed
 
 ### Added v0.0.7
 
-- Summary using OpenAi chatGPT 3.5 Turbo API.
+- Summary using OpenAi chatGPT 3.5 Turbo API (#20).
 
 ## [v0.0.6] - 2023-11-30
 

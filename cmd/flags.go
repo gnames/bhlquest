@@ -24,13 +24,6 @@ func debugFlag(cmd *cobra.Command) {
 	}
 }
 
-func rebuildDbFlag(cmd *cobra.Command) {
-	b, _ := cmd.Flags().GetBool("rebuild-db")
-	if b {
-		opts = append(opts, config.OptWithRebuildDb(true))
-	}
-}
-
 func noConfirmFlag(cmd *cobra.Command) {
 	b, _ := cmd.Flags().GetBool("yes-to-confirmations")
 	if b {

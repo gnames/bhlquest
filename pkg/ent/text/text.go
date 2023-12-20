@@ -6,6 +6,7 @@ import (
 	"github.com/gnames/bhlquest/pkg/config"
 	"github.com/gnames/bhlquest/pkg/ent/storage"
 	"github.com/gnames/gnlib"
+	"github.com/gnames/gnlib/ent/gnml"
 )
 
 type ItemText struct {
@@ -20,10 +21,10 @@ type Chunk struct {
 	PageIDs   []uint
 	Start     uint
 	End       uint
-	UUID      string
+	Length    uint
 	Text      string
 	Embedding []float32
-	Distance  float64
+	Score     float64
 }
 
 type text struct {
@@ -80,7 +81,17 @@ func (t *text) ChunkText(cnk Chunk) (string, string) {
 
 func (t *text) pagesToChunks(pages []storage.Page) []Chunk {
 	txt := combinePages(pages)
-	chunks := splitOverlap(pages[0].ItemID, txt, 1000, 100)
+	txts := gnml.SplitText(txt, 1500, 150)
+	chunks := gnlib.Map(txts, func(tp gnml.TextPart) Chunk {
+		res := Chunk{
+			ItemID: pages[0].ItemID,
+			Text:   tp.Content,
+			Start:  uint(tp.Start),
+			End:    uint(tp.End),
+			Length: uint(tp.Length),
+		}
+		return res
+	})
 	chunks = findPages(pages, chunks)
 	return chunks
 }
@@ -89,7 +100,7 @@ func combinePages(pages []storage.Page) string {
 	res := gnlib.Map(pages, func(p storage.Page) string {
 		return p.Text
 	})
-	txt := strings.Join(res, "\n")
+	txt := strings.Join(res, "")
 	return txt
 }
 
@@ -121,21 +132,32 @@ func findPages(pages []storage.Page, chunks []Chunk) []Chunk {
 
 	for i, chunk := range chunks {
 		var pagesForChunk []uint
+
+		// Continue from the last page index
 		for pageIndex < len(pages) {
 			page := pages[pageIndex]
-			if chunk.End < page.Start {
-				// The chunk ends before the current page starts; go to the next chunk.
+
+			// If the current page starts after the chunk ends, break the loop
+			if page.Start > chunk.End {
 				break
 			}
-			if chunk.Start <= page.End {
+
+			// Check if there is an overlap
+			if page.End >= chunk.Start {
 				// The chunk overlaps with the current page.
 				pagesForChunk = append(pagesForChunk, page.ID)
-				if chunk.End <= page.End {
-					// The chunk ends within the current page; go to the next chunk.
-					break
-				}
 			}
-			pageIndex++ // Move to the next page.
+
+			// If the current page ends before the chunk ends, move to the next page
+			if page.End < chunk.End {
+				pageIndex++
+				continue
+			}
+
+			// If the chunk ends within the current page, break the loop
+			if chunk.End <= page.End {
+				break
+			}
 		}
 		chunk.PageIDs = pagesForChunk
 		res[i] = chunk

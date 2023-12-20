@@ -56,8 +56,7 @@ func (bq bhlquest) Init() error {
 
 	itemsNum := len(ids)
 	bq.emb.SetItemsNum(itemsNum)
-	msg := fmt.Sprintf("Found %d items.", itemsNum)
-	slog.Info(msg)
+	slog.Info("Aquired BHL items", "items_num", itemsNum)
 
 	if !bq.cfg.WithoutConfirm {
 		fmt.Printf(
@@ -72,31 +71,10 @@ func (bq bhlquest) Init() error {
 		}
 	}
 
-	lastItemID := bq.emb.LastItemID()
-	if lastItemID > 0 && !bq.cfg.WithRebuildDb {
-		slog.Info("Selecting ItemIDs larger than last inserted record.", "Last ItemID", lastItemID)
-		tmp := make([]uint, 0, len(ids))
-		for i := range ids {
-			if ids[i] <= lastItemID {
-				continue
-			}
-			tmp = append(tmp, ids[i])
-		}
-		ids = tmp
-		slog.Info("Reduced number of ItemIDs", "ItemIDs Number", len(ids))
-	}
-
-	if bq.cfg.WithRebuildDb {
-		slog.Info("Initiate BHLquest database.")
-		err = bq.emb.Init()
-		if err != nil {
-			return err
-		}
-	} else {
-		slog.Info("Skipping database rebild.")
-		slog.Warn(
-			"It might create problems if 'classes' setting is different.",
-		)
+	slog.Info("Initiate BHLquest database.")
+	err = bq.emb.Init()
+	if err != nil {
+		return err
 	}
 
 	slog.Info("Find Items' texts and prepare them for AI.")

@@ -7,7 +7,6 @@ import (
 
 type Embed interface {
 	Init() error
-	LastItemID() uint
 	SetItemsNum(int)
 	Populate(itemIDs []uint) error
 	Embed(q []string) ([][]float32, error)

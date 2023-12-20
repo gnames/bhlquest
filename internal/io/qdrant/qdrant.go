@@ -3,6 +3,8 @@ package qdrant
 import (
 	"fmt"
 	"log/slog"
+	"sync"
+	"time"
 
 	"github.com/gnames/bhlquest/pkg/config"
 	"github.com/gnames/bhlquest/pkg/ent/answer"
@@ -66,10 +68,27 @@ func (qd *qdrant) LastItemID() uint {
 }
 
 func (qd *qdrant) SetItemsNum(itemsNum int) {
-
+	qd.itemsNum = itemsNum
 }
 
-func (qd *qdrant) Populate(itemIds []uint) error {
+func (qd *qdrant) Populate(itemIDs []uint) error {
+	chIn := make(chan []text.Chunk)
+	chOut := make(chan []text.Chunk)
+	var wg, saveWg sync.WaitGroup
+	wg.Add(1)
+	saveWg.Add(1)
+	start := time.Now()
+
+	go qd.embedStream(chIn, chOut, &wg)
+	go qd.saveStream(chOut, start, &saveWg)
+
+	qd.loadChunks(chIn, itemIDs)
+
+	wg.Wait()
+	close(chOut)
+
+	saveWg.Wait()
+
 	return nil
 }
 
@@ -99,7 +118,7 @@ func (qd *qdrant) Query(emb []float32) (answer.Answer, error) {
 			ItemID:      chs[i].ItemID,
 			PageIDStart: chs[i].PageIDs[0],
 			PageIDEnd:   chs[i].PageIDs[l-1],
-			Score:       1 - chs[i].Distance,
+			Score:       chs[i].Score,
 			Outlink: fmt.Sprintf(
 				"%s%d",
 				"https://www.biodiversitylibrary.org/page/",
