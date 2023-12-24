@@ -115,6 +115,7 @@ func (qd *qdrant) Query(emb []float32) (answer.Answer, error) {
 		txt, txtExt = qd.txt.ChunkText(chs[i])
 
 		d := answer.Result{
+			ChunkID:     chs[i].ID,
 			ItemID:      chs[i].ItemID,
 			PageIDStart: chs[i].PageIDs[0],
 			PageIDEnd:   chs[i].PageIDs[l-1],

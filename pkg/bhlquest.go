@@ -1,12 +1,10 @@
 package bhlquest
 
 import (
-	"cmp"
 	"errors"
 	"fmt"
 	"log/slog"
 	"os"
-	"slices"
 	"strings"
 	"time"
 
@@ -15,13 +13,14 @@ import (
 	"github.com/gnames/bhlquest/pkg/ent/bhln"
 	"github.com/gnames/bhlquest/pkg/ent/embed"
 	"github.com/gnames/bhlquest/pkg/ent/gpt"
-	"github.com/gnames/gnlib"
+	"github.com/gnames/bhlquest/pkg/rerank"
 	"github.com/gnames/gnlib/ent/gnvers"
 )
 
 type Components struct {
 	BHLNames bhln.BHLN
 	Embed    embed.Embed
+	Reranker rerank.Reranker
 	GPT      gpt.GPT
 }
 
@@ -29,6 +28,7 @@ type bhlquest struct {
 	cfg  config.Config
 	bhln bhln.BHLN
 	emb  embed.Embed
+	rnk  rerank.Reranker
 	gpt  gpt.GPT
 }
 
@@ -40,6 +40,7 @@ func New(
 		cfg:  cfg,
 		bhln: cmp.BHLNames,
 		emb:  cmp.Embed,
+		rnk:  cmp.Reranker,
 		gpt:  cmp.GPT,
 	}
 
@@ -102,30 +103,38 @@ func (bq bhlquest) Ask(q string) (answer.Answer, error) {
 	if err != nil {
 		return res, err
 	}
-	if bq.cfg.WithCrossEmbed {
-		cePairs := gnlib.Map(
-			res.Results, func(r answer.Result) []string {
-				return []string{res.Question, r.TextExt}
-			},
-		)
-		ceScore, err := bq.emb.CrossEmbed(cePairs)
-		if err != nil {
-			slog.Warn("Cross-embedding failed.")
-		}
-		for i := range res.Results {
-			res.Results[i].CrossScore = ceScore[i]
-		}
-		slices.SortStableFunc(
-			res.Results,
-			func(a, b answer.Result) int {
-				res := cmp.Compare(b.CrossScore, a.CrossScore)
-				if res != 0 {
-					return res
-				}
-				return cmp.Compare(b.Score, a.Score)
-			},
-		)
+
+	results, err := bq.rnk.Rerank(q, res.Results)
+	if err != nil {
+		return res, err
 	}
+
+	res.Results = results
+
+	// if bq.cfg.WithCrossEmbed {
+	// 	cePairs := gnlib.Map(
+	// 		res.Results, func(r answer.Result) []string {
+	// 			return []string{res.Question, r.TextExt}
+	// 		},
+	// 	)
+	// 	ceScore, err := bq.emb.CrossEmbed(cePairs)
+	// 	if err != nil {
+	// 		slog.Warn("Cross-embedding failed.")
+	// 	}
+	// 	for i := range res.Results {
+	// 		res.Results[i].CrossScore = ceScore[i]
+	// 	}
+	// 	slices.SortStableFunc(
+	// 		res.Results,
+	// 		func(a, b answer.Result) int {
+	// 			res := cmp.Compare(b.CrossScore, a.CrossScore)
+	// 			if res != 0 {
+	// 				return res
+	// 			}
+	// 			return cmp.Compare(b.Score, a.Score)
+	// 		},
+	// 	)
+	// }
 	if len(res.Results) > bq.cfg.MaxResultsNum {
 		res.Results = res.Results[:bq.cfg.MaxResultsNum]
 	}

@@ -2,6 +2,11 @@
 #
 # OpenaiAPIKey: 123456
 
+## CohereAPIKey is required for connection with Cohere service.
+#
+# CohereAPIKey: 098766
+
+
 ## BHLDir contains dump of BHL texts.
 #
 # BHLDir: /opt/bhl

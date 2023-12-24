@@ -42,6 +42,7 @@ type Meta struct {
 // @Description range of pages that contain answers to
 // @Description a given question.
 type Result struct {
+	ChunkID uint `json:"chunkId" example:"2980234"`
 	// ItemID is the ID of a BHL Item, such as a book
 	// or journal volume.
 	ItemID uint `json:"itemId" example:"226148"`

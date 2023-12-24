@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gnames/bhlquest/internal/io/bhlnio"
+	"github.com/gnames/bhlquest/internal/io/cohere"
 	"github.com/gnames/bhlquest/internal/io/gptio"
 	"github.com/gnames/bhlquest/internal/io/llmutilio"
 	"github.com/gnames/bhlquest/internal/io/qdrant"
@@ -40,6 +41,7 @@ func bhlquestFactory() bhlquest.BHLQuest {
 	cp := bhlquest.Components{
 		BHLNames: bn,
 		Embed:    emb,
+		Reranker: cohere.New(cfg),
 		GPT:      g,
 	}
 

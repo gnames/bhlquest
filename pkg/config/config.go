@@ -4,6 +4,9 @@ type Config struct {
 	// OpenaiAPIKey a key to OpenAI API
 	OpenaiAPIKey string
 
+	// CohereAPIKey is a key to Cohere service
+	CohereAPIKey string
+
 	// BHLDir is the path to BHL items and OCRed texts.
 	BHLDir string
 
@@ -71,6 +74,12 @@ type Option func(*Config)
 func OptOpenaiAPIKey(s string) Option {
 	return func(cfg *Config) {
 		cfg.OpenaiAPIKey = s
+	}
+}
+
+func OptCohereAPIKey(s string) Option {
+	return func(cfg *Config) {
+		cfg.CohereAPIKey = s
 	}
 }
 

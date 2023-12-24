@@ -46,6 +46,7 @@ var (
 // configuration file, if it exists.
 type configData struct {
 	OpenaiAPIKey string
+	CohereAPIKey string
 	BHLDir       string
 	LlmUtilURL   string
 	DbHost       string
@@ -106,6 +107,7 @@ func initConfig() {
 	viper.SetConfigName(configFile)
 
 	_ = viper.BindEnv("OpenaiAPIKey", "OPENAI_API_KEY")
+	_ = viper.BindEnv("CohereAPIKey", "COHERE_API_KEY")
 	_ = viper.BindEnv("BHLDir", "BHLQ_BHL_DIR")
 	_ = viper.BindEnv("LlmUtilURL", "BHLQ_LLM_UTIL_URL")
 	_ = viper.BindEnv("DbHost", "BHLQ_DB_HOST")
@@ -145,6 +147,9 @@ func getOpts() {
 
 	if cfgCli.OpenaiAPIKey != "" {
 		opts = append(opts, config.OptOpenaiAPIKey(cfgCli.OpenaiAPIKey))
+	}
+	if cfgCli.CohereAPIKey != "" {
+		opts = append(opts, config.OptCohereAPIKey(cfgCli.CohereAPIKey))
 	}
 	if cfgCli.BHLDir != "" {
 		opts = append(opts, config.OptBHLDir(cfgCli.BHLDir))
