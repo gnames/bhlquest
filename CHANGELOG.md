@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Prepare configuration of new features for Kubernetes.
+
 ## [v0.0.9] - 2023-12-24 Sat
 
 ### Added v0.0.9

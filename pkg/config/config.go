@@ -41,9 +41,6 @@ type Config struct {
 	// Port is the port where to run the RESTful service.
 	Port int
 
-	// APIDocURL is the url to the API documentation.
-	APIDocURL string
-
 	// InitClasses limits embedded import to certain taxa.
 	InitClasses []string
 
@@ -57,7 +54,7 @@ type Config struct {
 	// in an answer.
 	MaxResultsNum int
 
-	// WithoutConfirm when true, remves confirmation dialogs.
+	// WithoutConfirm when true, removes confirmation dialogs.
 	WithoutConfirm bool
 
 	// WithSummary adds LLM-generated summary generated from
@@ -98,6 +95,12 @@ func OptLlmUtilURL(s string) Option {
 func OptQdrantHost(s string) Option {
 	return func(cfg *Config) {
 		cfg.QdrantHost = s
+	}
+}
+
+func OptQdrantSegmentsNum(i uint64) Option {
+	return func(cfg *Config) {
+		cfg.QdrantSegmentsNum = i
 	}
 }
 
@@ -186,7 +189,6 @@ func New(opts ...Option) Config {
 		DbBHLQuest:        "bhlquest",
 		DbBHLNames:        "bhlnames",
 		Port:              8555,
-		APIDocURL:         "https://apidoc.globalnames.org/bhlquest",
 		ScoreThreshold:    0.4,
 		MaxResultsNum:     5,
 		WithSummary:       true,

@@ -45,16 +45,19 @@ var (
 // fConfig purpose is to achieve automatic import of data from the
 // configuration file, if it exists.
 type configData struct {
-	OpenaiAPIKey string
-	CohereAPIKey string
-	BHLDir       string
-	LlmUtilURL   string
-	DbHost       string
-	DbUser       string
-	DbPass       string
-	DbBHLQuest   string
-	DbBHLNames   string
-	PortREST     int
+	OpenaiAPIKey      string
+	CohereAPIKey      string
+	BHLDir            string
+	LlmUtilURL        string
+	QdrantHost        string
+	QdrantSegmentsNum uint64
+	VectorSize        uint64
+	DbHost            string
+	DbUser            string
+	DbPass            string
+	DbBHLQuest        string
+	DbBHLNames        string
+	PortREST          int
 }
 
 // rootCmd represents the base command when called without any subcommands
@@ -110,6 +113,9 @@ func initConfig() {
 	_ = viper.BindEnv("CohereAPIKey", "COHERE_API_KEY")
 	_ = viper.BindEnv("BHLDir", "BHLQ_BHL_DIR")
 	_ = viper.BindEnv("LlmUtilURL", "BHLQ_LLM_UTIL_URL")
+	_ = viper.BindEnv("QdrantHost", "BHLQ_QDRANT_HOST")
+	_ = viper.BindEnv("QdrantSegmentsNum", "BHLQ_QDRANT_SEGMENTS_NUM")
+	_ = viper.BindEnv("VectorSize", "BHLQ_VECTOR_SIZE")
 	_ = viper.BindEnv("DbHost", "BHLQ_DB_HOST")
 	_ = viper.BindEnv("DbUser", "BHLQ_DB_USER")
 	_ = viper.BindEnv("DbPass", "BHLQ_DB_PASS")
@@ -156,6 +162,15 @@ func getOpts() {
 	}
 	if cfgCli.LlmUtilURL != "" {
 		opts = append(opts, config.OptLlmUtilURL(cfgCli.LlmUtilURL))
+	}
+	if cfgCli.QdrantHost != "" {
+		opts = append(opts, config.OptQdrantHost(cfgCli.QdrantHost))
+	}
+	if cfgCli.QdrantSegmentsNum != 0 {
+		opts = append(opts, config.OptQdrantSegmentsNum(cfgCli.QdrantSegmentsNum))
+	}
+	if cfgCli.VectorSize != 0 {
+		opts = append(opts, config.OptVectorSize(cfgCli.VectorSize))
 	}
 	if cfgCli.DbHost != "" {
 		opts = append(opts, config.OptDbHost(cfgCli.DbHost))

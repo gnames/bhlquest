@@ -6,14 +6,25 @@
 #
 # CohereAPIKey: 098766
 
-
 ## BHLDir contains dump of BHL texts.
 #
 # BHLDir: /opt/bhl
 
-## LlmUtilURL is the URL to llmutil service
+## LlmUtilURL is the URL to llmutil service.
 #
 # LlmUtilURL: http://0.0.0.0:8000/api/v1
+
+## QdrantHost is vector database host.
+#
+# QdrantHost: 0.0.0.0:6334
+
+## QdrantSegmentsNum the default number of segments in Qdrant backend.
+#
+# QdrantSegmentsNum: 2
+
+## VectorSize is the dimensionality of stored vectors.
+#
+# VectorSize: 768
 
 ## DbHost is the host where Postgres is running.
 # 
