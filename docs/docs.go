@@ -222,7 +222,7 @@ const docTemplate = `{
                     "example": 0.7505834773704542
                 },
                 "text": {
-                    "description": "Text respresents the actual string that was used for matching by AI.",
+                    "description": "TextExt contains more text that Text, allowing to create\na better summary.",
                     "type": "string"
                 }
             }

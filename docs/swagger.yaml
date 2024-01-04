@@ -87,8 +87,9 @@ definitions:
         example: 0.7505834773704542
         type: number
       text:
-        description: Text respresents the actual string that was used for matching
-          by AI.
+        description: |-
+          TextExt contains more text that Text, allowing to create
+          a better summary.
         type: string
     type: object
   gnvers.Version:

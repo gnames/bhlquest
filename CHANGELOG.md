@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+
+## [v0.0.10] - 2024-01-04 Thu
+
+- Add bigger texts for JSON
 - Prepare configuration of new features for Kubernetes.
 
 ## [v0.0.9] - 2023-12-24 Sat

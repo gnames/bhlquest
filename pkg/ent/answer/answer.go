@@ -65,11 +65,11 @@ type Result struct {
 	// Outlink is the URL pointing to the BHL website
 	// for PageIDStart.
 	Outlink string `json:"outlink" example:"https://www.biodiversitylibrary.org/page/53469262"`
+	Text    string `json:"-"`
 
 	// Text respresents the actual string that was used for matching by AI.
-	Text string `json:"text,omitempty"`
 
 	// TextExt contains more text that Text, allowing to create
 	// a better summary.
-	TextExt string `json:"-"`
+	TextExt string `json:"text,omitempty"`
 }
