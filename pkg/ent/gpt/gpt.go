@@ -28,7 +28,7 @@ func (g *gpt) Summary(inp answer.Answer) (string, error) {
 		return res, nil
 	}
 
-	texts := gnlib.Map(inp.Results, func(res answer.Result) string {
+	texts := gnlib.Map(inp.Results, func(res *answer.Result) string {
 		return res.TextExt
 	})
 	if len(texts) >= 5 {

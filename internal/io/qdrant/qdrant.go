@@ -107,7 +107,7 @@ func (qd *qdrant) Query(emb []float32) (answer.Answer, error) {
 	if err != nil {
 		return res, err
 	}
-	var data []answer.Result
+	var data []*answer.Result
 	for i := range chs {
 		var txt, txtExt string
 		l := len(chs[i].PageIDs)
@@ -128,7 +128,7 @@ func (qd *qdrant) Query(emb []float32) (answer.Answer, error) {
 			Text:    txt,
 			TextExt: txtExt,
 		}
-		data = append(data, d)
+		data = append(data, &d)
 	}
 	res.Results = data
 	return res, nil

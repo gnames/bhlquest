@@ -6,6 +6,7 @@ import (
 	"github.com/gnames/bhlquest/internal/io/dbshare"
 	"github.com/gnames/bhlquest/pkg/config"
 	"github.com/gnames/bhlquest/pkg/ent/bhln"
+	"github.com/gnames/bhlquest/pkg/ent/ref"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -29,6 +30,10 @@ func New(cfg config.Config) (bhln.BHLN, error) {
 	res.db = db
 
 	return &res, nil
+}
+
+func (bn *bhlnio) References(pages []int) (map[int]ref.Reference, error) {
+	return bn.dbReference(pages)
 }
 
 func (bn *bhlnio) ItemIds(

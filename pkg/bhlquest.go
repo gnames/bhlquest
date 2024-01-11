@@ -13,7 +13,9 @@ import (
 	"github.com/gnames/bhlquest/pkg/ent/bhln"
 	"github.com/gnames/bhlquest/pkg/ent/embed"
 	"github.com/gnames/bhlquest/pkg/ent/gpt"
+	"github.com/gnames/bhlquest/pkg/ent/ref"
 	"github.com/gnames/bhlquest/pkg/rerank"
+	"github.com/gnames/gnlib"
 	"github.com/gnames/gnlib/ent/gnvers"
 )
 
@@ -91,6 +93,7 @@ func (bq bhlquest) Init() error {
 func (bq bhlquest) Ask(q string) (answer.Answer, error) {
 	start := time.Now()
 	var res answer.Answer
+	var results []*answer.Result
 	emb, err := bq.emb.Embed([]string{q})
 	if err != nil {
 		return res, err
@@ -103,38 +106,17 @@ func (bq bhlquest) Ask(q string) (answer.Answer, error) {
 	if err != nil {
 		return res, err
 	}
-
-	results, err := bq.rnk.Rerank(q, res.Results)
+	results, err = bq.addReferences(res.Results)
 	if err != nil {
 		return res, err
 	}
 
+	results, err = bq.rnk.Rerank(q, results)
+	if err != nil {
+		return res, err
+	}
 	res.Results = results
 
-	// if bq.cfg.WithCrossEmbed {
-	// 	cePairs := gnlib.Map(
-	// 		res.Results, func(r answer.Result) []string {
-	// 			return []string{res.Question, r.TextExt}
-	// 		},
-	// 	)
-	// 	ceScore, err := bq.emb.CrossEmbed(cePairs)
-	// 	if err != nil {
-	// 		slog.Warn("Cross-embedding failed.")
-	// 	}
-	// 	for i := range res.Results {
-	// 		res.Results[i].CrossScore = ceScore[i]
-	// 	}
-	// 	slices.SortStableFunc(
-	// 		res.Results,
-	// 		func(a, b answer.Result) int {
-	// 			res := cmp.Compare(b.CrossScore, a.CrossScore)
-	// 			if res != 0 {
-	// 				return res
-	// 			}
-	// 			return cmp.Compare(b.Score, a.Score)
-	// 		},
-	// 	)
-	// }
 	if len(res.Results) > bq.cfg.MaxResultsNum {
 		res.Results = res.Results[:bq.cfg.MaxResultsNum]
 	}
@@ -170,4 +152,44 @@ func GetVersion() gnvers.Version {
 		Build:   Build,
 	}
 	return version
+}
+
+// addReferences adds references to the results, it also tries to remove duplicates
+// using ref.Reference.Fingerprint.
+func (bq bhlquest) addReferences(
+	results []*answer.Result,
+) ([]*answer.Result, error) {
+	var res []*answer.Result
+	ids := gnlib.Map(results, func(r *answer.Result) int {
+		return int(r.PageIDStart)
+	})
+	refs, err := bq.bhln.References(ids)
+	if err != nil {
+		return res, err
+	}
+	rs := results
+	dupl := make(map[string]struct{})
+	var ref ref.Reference
+	var ok bool
+	for i := range rs {
+		if ref, ok = refs[int(rs[i].PageIDStart)]; !ok {
+			res = append(res, rs[i])
+			continue
+		}
+		if _, ok = dupl[ref.Fingerprint]; ok {
+			continue
+		}
+		dupl[ref.Fingerprint] = struct{}{}
+		rs[i].Reference = ref
+		rs[i].RefString = ref.String()
+		if ref.TitleDOI != "" {
+			rs[i].OutlinkTitleDOI = "https://doi.org/" + ref.TitleDOI
+
+		}
+		if ref.TitleLang != "" {
+			rs[i].Language = strings.ToLower(ref.TitleLang)
+		}
+		res = append(res, rs[i])
+	}
+	return res, nil
 }

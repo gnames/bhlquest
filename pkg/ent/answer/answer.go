@@ -1,5 +1,7 @@
 package answer
 
+import "github.com/gnames/bhlquest/pkg/ent/ref"
+
 // Answer is a struct that represents the response to a query.
 // @Description Answer holds the metadata and results for a
 // @Description query response, containing the pages from BHL
@@ -13,7 +15,7 @@ type Answer struct {
 	Summary string `json:"summary"`
 
 	// Results is a list of pages containing the answers.
-	Results []Result `json:"results"`
+	Results []*Result `json:"results"`
 }
 
 // Meta contains metadata about the request.
@@ -45,7 +47,7 @@ type Result struct {
 	ChunkID uint `json:"chunkId" example:"2980234"`
 	// ItemID is the ID of a BHL Item, such as a book
 	// or journal volume.
-	ItemID uint `json:"itemId" example:"226148"`
+	ItemID uint `json:"itemId"  example:"226148"`
 
 	// PageIDStart is the ID of the starting page of the answer.
 	PageIDStart uint `json:"pageStart" example:"53469262"`
@@ -65,11 +67,26 @@ type Result struct {
 	// Outlink is the URL pointing to the BHL website
 	// for PageIDStart.
 	Outlink string `json:"outlink" example:"https://www.biodiversitylibrary.org/page/53469262"`
-	Text    string `json:"-"`
 
 	// Text respresents the actual string that was used for matching by AI.
+	Text string `json:"-"`
 
 	// TextExt contains more text that Text, allowing to create
 	// a better summary.
 	TextExt string `json:"text,omitempty"`
+
+	// PageText is the text of a page with the answer.
+	PageText string `json:"pageText,omitempty"`
+
+	// Reference is the BHL reference for the page of the answer.
+	ref.Reference `json:"-"`
+
+	// RefString is the string representation of the BHL reference.
+	RefString string `json:"reference,omitempty"`
+
+	// Language is the main language of the item's title.
+	Language string `json:"language,omitempty"`
+
+	// OutlinkTitleDOI is the DOI of the item's title.
+	OutlinkTitleDOI string `json:"outlinkTitleDOI,omitempty"`
 }

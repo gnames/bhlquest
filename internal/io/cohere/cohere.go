@@ -29,12 +29,12 @@ func New(cfg config.Config) rerank.Reranker {
 
 func (c *cohere) Rerank(
 	query string,
-	rs []answer.Result,
-) ([]answer.Result, error) {
+	rs []*answer.Result,
+) ([]*answer.Result, error) {
 	maxChunksPerDoc := 10
 
 	resp := &response.Rerank{}
-	txts := gnlib.Map(rs, func(r answer.Result) string {
+	txts := gnlib.Map(rs, func(r *answer.Result) string {
 		return r.TextExt
 	})
 	req := request.Rerank{
@@ -52,7 +52,7 @@ func (c *cohere) Rerank(
 	for i := range resp.Results {
 		rs[i].CrossScore = resp.Results[i].RelevanceScore
 	}
-	slices.SortFunc(rs, func(a, b answer.Result) int {
+	slices.SortFunc(rs, func(a, b *answer.Result) int {
 		return cmp.Compare(b.CrossScore, a.CrossScore)
 	})
 	return rs, nil
