@@ -5,9 +5,9 @@ import (
 	"context"
 	"slices"
 
+	"github.com/gnames/bhlquest/internal/rerank"
 	"github.com/gnames/bhlquest/pkg/config"
-	"github.com/gnames/bhlquest/pkg/ent/answer"
-	"github.com/gnames/bhlquest/pkg/rerank"
+	"github.com/gnames/bhlquest/pkg/ent/output"
 	"github.com/gnames/gnlib"
 	coherego "github.com/henomis/cohere-go"
 	"github.com/henomis/cohere-go/request"
@@ -29,13 +29,13 @@ func New(cfg config.Config) rerank.Reranker {
 
 func (c *cohere) Rerank(
 	query string,
-	rs []*answer.Result,
-) ([]*answer.Result, error) {
+	rs []*output.Result,
+) ([]*output.Result, error) {
 	maxChunksPerDoc := 10
 
 	resp := &response.Rerank{}
-	txts := gnlib.Map(rs, func(r *answer.Result) string {
-		return r.TextExt
+	txts := gnlib.Map(rs, func(r *output.Result) string {
+		return r.TextForSummary
 	})
 	req := request.Rerank{
 		ReturnDocuments: true,
@@ -52,7 +52,7 @@ func (c *cohere) Rerank(
 	for i := range resp.Results {
 		rs[i].CrossScore = resp.Results[i].RelevanceScore
 	}
-	slices.SortFunc(rs, func(a, b *answer.Result) int {
+	slices.SortFunc(rs, func(a, b *output.Result) int {
 		return cmp.Compare(b.CrossScore, a.CrossScore)
 	})
 	return rs, nil

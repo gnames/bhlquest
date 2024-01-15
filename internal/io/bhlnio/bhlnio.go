@@ -3,10 +3,10 @@ package bhlnio
 import (
 	"context"
 
+	"github.com/gnames/bhlquest/internal/bhln"
+	"github.com/gnames/bhlquest/internal/ent/ref"
 	"github.com/gnames/bhlquest/internal/io/dbshare"
 	"github.com/gnames/bhlquest/pkg/config"
-	"github.com/gnames/bhlquest/pkg/ent/bhln"
-	"github.com/gnames/bhlquest/pkg/ent/ref"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 

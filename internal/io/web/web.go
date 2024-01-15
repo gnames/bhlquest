@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	bhlquest "github.com/gnames/bhlquest/pkg"
-	"github.com/gnames/bhlquest/pkg/ent/answer"
+	"github.com/gnames/bhlquest/pkg/ent/output"
 	"github.com/labstack/echo/v4"
 )
 
@@ -16,7 +16,7 @@ type Duration struct {
 // Data contains information needed to render web-pages.
 type Data struct {
 	Page           string
-	Output         *answer.Answer
+	Output         *output.Answer
 	Question       string
 	Format         string
 	FormatOptions  []string

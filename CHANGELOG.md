@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-## [v0.0.11] - 2024-01-11 Thu
+## [v0.0.11] - 2024-01-18 Thu
 
+- Improve chunks in result (#26)
 - Add references to results (#25)
 
 ## [v0.0.10] - 2024-01-04 Thu

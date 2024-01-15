@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gnames/bhlquest/pkg/ent/ref"
+	"github.com/gnames/bhlquest/internal/ent/ref"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -36,7 +36,7 @@ WHERE main_class = ANY($1::varchar[]) OR
 			bn.cfg.InitTaxa,
 		)
 	} else {
-		q := `select id from items`
+		q := `SELECT id FROM items`
 		rows, err = bn.db.Query(context.Background(), q)
 	}
 

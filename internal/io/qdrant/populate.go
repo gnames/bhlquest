@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/dustin/go-humanize"
-	"github.com/gnames/bhlquest/pkg/ent/text"
+	"github.com/gnames/bhlquest/internal/ent/text"
 	"github.com/gnames/gnfmt"
 )
 
@@ -79,7 +79,7 @@ func (qd *qdrant) loadChunks(
 ) {
 	var count uint
 	for _, id := range itemIDs {
-		chunks, err := qd.txt.TextToChunks(id)
+		chunks, err := qd.txt.ItemToChunks(id)
 		if err != nil {
 			slog.Error("Cannot create chunks", "error", err)
 			os.Exit(1)

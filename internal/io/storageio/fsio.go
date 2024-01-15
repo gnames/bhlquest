@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gnames/bhlquest/pkg/ent/storage"
+	"github.com/gnames/bhlquest/internal/storage"
 	"github.com/gnames/gnsys"
 )
 

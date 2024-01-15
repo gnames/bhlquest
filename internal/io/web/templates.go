@@ -86,6 +86,9 @@ func addFuncs(tmpl *template.Template) {
 		},
 		"formatText": func(s string) template.HTML {
 			res := strings.Replace(template.HTMLEscapeString(s), "\n", "<br>", -1)
+			res = strings.Replace(res, "&lt;em&gt;", "<em>", -1)
+			res = strings.Replace(res, "&lt;/em&gt;", "</em>", -1)
+
 			return template.HTML(res)
 		},
 	})

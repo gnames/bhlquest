@@ -1,8 +1,8 @@
 package storageio
 
 import (
+	"github.com/gnames/bhlquest/internal/storage"
 	"github.com/gnames/bhlquest/pkg/config"
-	"github.com/gnames/bhlquest/pkg/ent/storage"
 )
 
 type storageio struct {

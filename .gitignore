@@ -12,6 +12,9 @@ _test
 *.test
 *.prof
 
+t
+t.json
+
 # Cache files
 .cache/
 

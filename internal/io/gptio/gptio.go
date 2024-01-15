@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/gnames/bhlquest/pkg/config"
-	"github.com/sashabaranov/go-openai"
+	openai "github.com/sashabaranov/go-openai"
 )
 
 type api struct {

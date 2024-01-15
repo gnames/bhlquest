@@ -3,9 +3,9 @@ package llmutilio
 import (
 	"net/http"
 
+	"github.com/gnames/bhlquest/internal/ent/text"
+	"github.com/gnames/bhlquest/internal/llmutil"
 	"github.com/gnames/bhlquest/pkg/config"
-	"github.com/gnames/bhlquest/pkg/ent/llmutil"
-	"github.com/gnames/bhlquest/pkg/ent/text"
 	"github.com/gnames/gnfmt"
 	"github.com/gnames/gnlib"
 )

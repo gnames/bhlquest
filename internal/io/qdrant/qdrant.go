@@ -6,12 +6,14 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gnames/bhlquest/internal/embed"
+	"github.com/gnames/bhlquest/internal/ent/text"
+	"github.com/gnames/bhlquest/internal/llmutil"
+	"github.com/gnames/bhlquest/internal/storage"
 	"github.com/gnames/bhlquest/pkg/config"
-	"github.com/gnames/bhlquest/pkg/ent/answer"
-	"github.com/gnames/bhlquest/pkg/ent/embed"
-	"github.com/gnames/bhlquest/pkg/ent/llmutil"
-	"github.com/gnames/bhlquest/pkg/ent/storage"
-	"github.com/gnames/bhlquest/pkg/ent/text"
+	"github.com/gnames/bhlquest/pkg/ent/output"
+	"github.com/gnames/gnbhl/ent/pagebhl"
+	"github.com/gnames/gnlib"
 	pb "github.com/qdrant/go-client/qdrant"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -39,7 +41,10 @@ func New(
 		llm: llm,
 	}
 
-	conn, err := grpc.Dial(cfg.QdrantHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(
+		cfg.QdrantHost,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -101,32 +106,57 @@ func (qd *qdrant) CrossEmbed(ss [][]string) ([]float64, error) {
 	return res, nil
 }
 
-func (qd *qdrant) Query(emb []float32) (answer.Answer, error) {
-	var res answer.Answer
+// Query takes embedded question and resturns a slice of chunks that
+// match putative answers.
+func (qd *qdrant) Query(emb []float32) (output.Answer, error) {
+	var res output.Answer
 	chs, err := qd.query(emb)
 	if err != nil {
 		return res, err
 	}
-	var data []*answer.Result
+	var data []*output.Result
 	for i := range chs {
-		var txt, txtExt string
-		l := len(chs[i].PageIDs)
+		itm, err := qd.txt.ItemByID(chs[i].ItemID)
+		if err != nil {
+			return res, err
+		}
+		start := int(chs[i].Start)
+		end := int(chs[i].Start + chs[i].Length)
+		cnkBHL, err := itm.Chunk(start, end)
+		if err != nil {
+			return res, err
+		}
 
-		txt, txtExt = qd.txt.ChunkText(chs[i])
+		// get the text to sent to GPT for summary
+		summaryText := cnkBHL.Text
+		summaryChunk, err := itm.Chunk(start-500, start+2000)
+		if err == nil {
+			summaryText = summaryChunk.Text
+		}
 
-		d := answer.Result{
-			ChunkID:     chs[i].ID,
-			ItemID:      chs[i].ItemID,
-			PageIDStart: chs[i].PageIDs[0],
-			PageIDEnd:   chs[i].PageIDs[l-1],
-			Score:       chs[i].Score,
+		var pagesText []string
+		for _, v := range cnkBHL.Pages {
+			pagesText = append(pagesText, markChunk(v, start, end))
+
+		}
+
+		d := output.Result{
+			ChunkID: chs[i].ID,
+			ItemID:  chs[i].ItemID,
+			PageID:  cnkBHL.Pages[0].ID,
+			PageIDs: gnlib.Map(itm.Pages(), func(p *pagebhl.PageBHL) uint {
+				return uint(p.ID)
+			}),
+			PageIndex: cnkBHL.PageIdxStart,
+
+			Score: chs[i].Score,
 			Outlink: fmt.Sprintf(
 				"%s%d",
 				"https://www.biodiversitylibrary.org/page/",
-				chs[i].PageIDs[0],
+				cnkBHL.Pages[0].ID,
 			),
-			Text:    txt,
-			TextExt: txtExt,
+			TextPages:      pagesText,
+			TextForSummary: summaryText,
 		}
 		data = append(data, &d)
 	}
@@ -138,4 +168,30 @@ func (qd *qdrant) SetConfig(cfg config.Config) embed.Embed {
 	copy := *qd
 	copy.cfg = cfg
 	return &copy
+}
+
+func markChunk(p *pagebhl.PageBHL, start, end int) string {
+	offs := int(p.Offset)
+	start = start - offs
+	end = end - offs
+	if (start < 0 && end < 0) || (start > len(p.Text) && end > len(p.Text)) {
+		return p.Text
+	}
+	if start < 0 {
+		start = 0
+	}
+	if end > len(p.Text) {
+		end = len(p.Text)
+	}
+	var res string
+	if start > 0 {
+		res += p.Text[:start]
+	}
+	res += "<em>"
+	res += p.Text[start:end]
+	res += "</em>"
+	if end < len(p.Text) {
+		res += p.Text[end:]
+	}
+	return res
 }

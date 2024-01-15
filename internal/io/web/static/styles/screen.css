@@ -67,9 +67,18 @@ fieldset {
   line-height: 1.1em;
   margin-bottom: 1em;
   padding-left: 1em;
-  height: 100px;
-  overflow: auto;
+  /* height: 100px; */
+  /* overflow: auto; */
 }
+
+.result-text em {
+  font-style: normal;
+  color: #3d90c8;
+  font-weight: bold; 
+}  
+
+
+
 
 label {
   font-family: arial;
@@ -319,7 +328,6 @@ p.separator {
   font-weight: bold; }
 
 #form-panel {
-  // width: 85%;
   border: 1px solid #3d90c8;
   border-radius: 8px;
   padding: 1em;
@@ -340,7 +348,7 @@ p.separator {
 
 #form-panel button {
   font-size: 1.2em;
-  border 1px solid white;
+  border: 1px solid white;
   padding: 0.4em;
   border-radius: 13px;
 }
@@ -573,7 +581,7 @@ th.created, td.created {
 }
 
 td.verfication {
-  witdth: 1em;
+  width: 1em;
 }
 
 span.no-match {

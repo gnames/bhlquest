@@ -8,22 +8,22 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gnames/bhlquest/internal/bhln"
+	"github.com/gnames/bhlquest/internal/embed"
+	"github.com/gnames/bhlquest/internal/ent/ref"
+	"github.com/gnames/bhlquest/internal/gpt"
+	"github.com/gnames/bhlquest/internal/rerank"
 	"github.com/gnames/bhlquest/pkg/config"
-	"github.com/gnames/bhlquest/pkg/ent/answer"
-	"github.com/gnames/bhlquest/pkg/ent/bhln"
-	"github.com/gnames/bhlquest/pkg/ent/embed"
-	"github.com/gnames/bhlquest/pkg/ent/gpt"
-	"github.com/gnames/bhlquest/pkg/ent/ref"
-	"github.com/gnames/bhlquest/pkg/rerank"
+	"github.com/gnames/bhlquest/pkg/ent/output"
 	"github.com/gnames/gnlib"
 	"github.com/gnames/gnlib/ent/gnvers"
 )
 
 type Components struct {
-	BHLNames bhln.BHLN
-	Embed    embed.Embed
-	Reranker rerank.Reranker
-	GPT      gpt.GPT
+	bhln.BHLN
+	embed.Embed
+	rerank.Reranker
+	gpt.GPT
 }
 
 type bhlquest struct {
@@ -34,21 +34,23 @@ type bhlquest struct {
 	gpt  gpt.GPT
 }
 
+// New creates a new instance of BHLQuest.
 func New(
 	cfg config.Config,
 	cmp Components,
 ) BHLQuest {
 	res := bhlquest{
 		cfg:  cfg,
-		bhln: cmp.BHLNames,
+		bhln: cmp.BHLN,
 		emb:  cmp.Embed,
-		rnk:  cmp.Reranker,
 		gpt:  cmp.GPT,
+		rnk:  cmp.Reranker,
 	}
 
 	return res
 }
 
+// Init creates a vector data-store from BHL Items.
 func (bq bhlquest) Init() error {
 	slog.Info("Start initial data process")
 	slog.Info("Collect IDs of relevant BHL items.")
@@ -56,7 +58,6 @@ func (bq bhlquest) Init() error {
 	if err != nil {
 		return err
 	}
-
 	itemsNum := len(ids)
 	bq.emb.SetItemsNum(itemsNum)
 	slog.Info("Aquired BHL items", "items_num", itemsNum)
@@ -90,22 +91,24 @@ func (bq bhlquest) Init() error {
 	return nil
 }
 
-func (bq bhlquest) Ask(q string) (answer.Answer, error) {
+func (bq bhlquest) Ask(q string) (output.Answer, error) {
 	start := time.Now()
-	var res answer.Answer
-	var results []*answer.Result
+	var res output.Answer
+	var results []*output.Result
 	emb, err := bq.emb.Embed([]string{q})
 	if err != nil {
 		return res, err
 	}
 	if len(emb) < 1 {
-		err := errors.New("embedding of the question failed")
+		err = errors.New("embedding of the question failed")
 		return res, err
 	}
+
 	res, err = bq.emb.Query(emb[0])
 	if err != nil {
 		return res, err
 	}
+
 	results, err = bq.addReferences(res.Results)
 	if err != nil {
 		return res, err
@@ -121,9 +124,9 @@ func (bq bhlquest) Ask(q string) (answer.Answer, error) {
 		res.Results = res.Results[:bq.cfg.MaxResultsNum]
 	}
 	duration := time.Since(start).Seconds()
-	res.Meta.Question = q
-	res.Meta.QueryTime = duration
-	res.Meta.Version = GetVersion().Version
+	res.Question = q
+	res.QueryTime = duration
+	res.Version = GetVersion().Version
 	if bq.cfg.WithSummary {
 		sum, err := bq.gpt.Summary(res)
 		if err == nil {
@@ -135,10 +138,12 @@ func (bq bhlquest) Ask(q string) (answer.Answer, error) {
 	return res, nil
 }
 
+// GetConfig provides configuration of the app.
 func (bq bhlquest) GetConfig() config.Config {
 	return bq.cfg
 }
 
+// SetConfig updates configuration of the app.
 func (bq bhlquest) SetConfig(cfg config.Config) BHLQuest {
 	bq.cfg = cfg
 	bq.emb = bq.emb.SetConfig(cfg)
@@ -157,11 +162,11 @@ func GetVersion() gnvers.Version {
 // addReferences adds references to the results, it also tries to remove duplicates
 // using ref.Reference.Fingerprint.
 func (bq bhlquest) addReferences(
-	results []*answer.Result,
-) ([]*answer.Result, error) {
-	var res []*answer.Result
-	ids := gnlib.Map(results, func(r *answer.Result) int {
-		return int(r.PageIDStart)
+	results []*output.Result,
+) ([]*output.Result, error) {
+	var res []*output.Result
+	ids := gnlib.Map(results, func(r *output.Result) int {
+		return int(r.PageID)
 	})
 	refs, err := bq.bhln.References(ids)
 	if err != nil {
@@ -172,7 +177,7 @@ func (bq bhlquest) addReferences(
 	var ref ref.Reference
 	var ok bool
 	for i := range rs {
-		if ref, ok = refs[int(rs[i].PageIDStart)]; !ok {
+		if ref, ok = refs[int(rs[i].PageID)]; !ok {
 			res = append(res, rs[i])
 			continue
 		}
@@ -180,8 +185,7 @@ func (bq bhlquest) addReferences(
 			continue
 		}
 		dupl[ref.Fingerprint] = struct{}{}
-		rs[i].Reference = ref
-		rs[i].RefString = ref.String()
+		rs[i].Reference = ref.String()
 		if ref.TitleDOI != "" {
 			rs[i].OutlinkTitleDOI = "https://doi.org/" + ref.TitleDOI
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"log/slog"
 
-	"github.com/gnames/bhlquest/pkg/ent/text"
+	"github.com/gnames/bhlquest/internal/ent/text"
 	pb "github.com/qdrant/go-client/qdrant"
 )
 
@@ -55,8 +55,12 @@ func (qd *qdrant) query(emb []float32) ([]text.Chunk, error) {
 		Vector:         emb,
 		Limit:          25,
 		// Include all payload and vectors in the search result
-		WithVectors: &pb.WithVectorsSelector{SelectorOptions: &pb.WithVectorsSelector_Enable{Enable: true}},
-		WithPayload: &pb.WithPayloadSelector{SelectorOptions: &pb.WithPayloadSelector_Enable{Enable: true}},
+		WithVectors: &pb.WithVectorsSelector{
+			SelectorOptions: &pb.WithVectorsSelector_Enable{Enable: true},
+		},
+		WithPayload: &pb.WithPayloadSelector{
+			SelectorOptions: &pb.WithPayloadSelector_Enable{Enable: true},
+		},
 	})
 	if err != nil {
 		return nil, err
@@ -64,13 +68,11 @@ func (qd *qdrant) query(emb []float32) ([]text.Chunk, error) {
 	var res []text.Chunk
 	for _, v := range pts.GetResult() {
 		pl := v.Payload
-		pgSt := uint(pl["page_id"].GetIntegerValue())
-		pgEnd := uint(pl["page_end_id"].GetIntegerValue())
 		ch := text.Chunk{
 			ID:        uint(v.Id.GetNum()),
 			ItemID:    uint(pl["item_id"].GetIntegerValue()),
-			PageIDs:   []uint{pgSt, pgEnd},
-			Start:     uint(pl["item_offset"].GetIntegerValue()),
+			Start:     uint(pl["chunk_offset"].GetIntegerValue()),
+			Length:    uint(pl["chunk_length"].GetIntegerValue()),
 			Embedding: v.Vectors.GetVector().GetData(),
 			Score:     float64(v.GetScore()),
 		}
@@ -101,18 +103,11 @@ func getPoint(ch text.Chunk) *pb.PointStruct {
 			"item_id": {
 				Kind: &pb.Value_IntegerValue{IntegerValue: int64(ch.ItemID)},
 			},
-			"page_id": {
-				Kind: &pb.Value_IntegerValue{
-					IntegerValue: int64(ch.PageIDs[0]),
-				},
-			},
-			"page_end_id": {
-				Kind: &pb.Value_IntegerValue{
-					IntegerValue: int64(ch.PageIDs[len(ch.PageIDs)-1]),
-				},
-			},
-			"item_offset": {
+			"chunk_offset": {
 				Kind: &pb.Value_IntegerValue{IntegerValue: int64(ch.Start)},
+			},
+			"chunk_length": {
+				Kind: &pb.Value_IntegerValue{IntegerValue: int64(ch.Length)},
 			},
 		},
 	}

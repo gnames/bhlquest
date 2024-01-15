@@ -7,9 +7,18 @@
       CrossScore: {{ formatFloat .CrossScore }}
       {{ end }}
     <p>
+    {{ if .Reference }}
+    <p>
+      {{ .Reference }}
+      {{ if .OutlinkTitleDOI }}
+      <a href='https://doi.org/{{ .OutlinkTitleDOI }}'>{{ .OutlinkTitleDOI }}</a>
+      {{ end }}
+    </p>
+    {{ end }}
+
     <p><a href='{{ .Outlink }}'>{{ .Outlink }}</a></p>
-    {{ if .Text }}
-      <div class='result-text'>{{ .Text | formatText }}</div>
+    {{ range .TextPages }}
+      <div class='result-text'>{{ . | formatText }}</div>
     {{ end }}
   </div>
   <hr/>

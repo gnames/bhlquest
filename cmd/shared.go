@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/gnames/bhlquest/internal/gpt"
 	"github.com/gnames/bhlquest/internal/io/bhlnio"
 	"github.com/gnames/bhlquest/internal/io/cohere"
 	"github.com/gnames/bhlquest/internal/io/gptio"
@@ -12,26 +13,27 @@ import (
 	"github.com/gnames/bhlquest/internal/io/storageio"
 	bhlquest "github.com/gnames/bhlquest/pkg"
 	"github.com/gnames/bhlquest/pkg/config"
-	"github.com/gnames/bhlquest/pkg/ent/gpt"
 )
 
 func bhlquestFactory() bhlquest.BHLQuest {
 	cfg := config.New(opts...)
+
 	gAPI := gptio.New(cfg)
 	g := gpt.New(cfg, gAPI)
+
 	bn, err := bhlnio.New(cfg)
 	if err != nil {
 		slog.Error("No connection to BHLNames db", "error", err)
 		os.Exit(1)
 	}
 
-	stg := storageio.New(cfg)
-
 	llm, err := llmutilio.New(cfg)
 	if err != nil {
 		slog.Error("No connection to llmutil", "error", err)
 		os.Exit(1)
 	}
+
+	stg := storageio.New(cfg)
 	emb, err := qdrant.New(cfg, stg, llm)
 	if err != nil {
 		slog.Error("No connection to embedding db", "error", err)
@@ -39,7 +41,7 @@ func bhlquestFactory() bhlquest.BHLQuest {
 	}
 
 	cp := bhlquest.Components{
-		BHLNames: bn,
+		BHLN:     bn,
 		Embed:    emb,
 		Reranker: cohere.New(cfg),
 		GPT:      g,
@@ -47,5 +49,4 @@ func bhlquestFactory() bhlquest.BHLQuest {
 
 	bq := bhlquest.New(cfg, cp)
 	return bq
-
 }
