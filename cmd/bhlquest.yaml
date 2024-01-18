@@ -18,6 +18,10 @@
 #
 # QdrantHost: 0.0.0.0:6334
 
+## QdrantDb is the database name where BHLquest keeps its vector data.
+#
+# QdrantDb: bhlquest
+
 ## QdrantSegmentsNum the default number of segments in Qdrant backend.
 #
 # QdrantSegmentsNum: 2
@@ -37,10 +41,6 @@
 ## DbPass is the DbUser's password.
 #
 # DbPass: postgres
-
-## DbBHLQuest is the database where BHLquest keeps its data.
-#
-# DbBHLQuest: bhlquest
 
 ## DbBHLNames is the database where BHLnames keeps its data
 #

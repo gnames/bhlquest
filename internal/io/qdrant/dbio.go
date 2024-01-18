@@ -13,7 +13,7 @@ var ctx = context.Background()
 func (qd *qdrant) init() error {
 	ctx := context.Background()
 	_, err := qd.clientC.Delete(ctx, &pb.DeleteCollection{
-		CollectionName: qd.cfg.DbBHLQuest,
+		CollectionName: qd.cfg.QdrantDb,
 	})
 	if err != nil {
 		return err
@@ -21,12 +21,12 @@ func (qd *qdrant) init() error {
 	slog.Info(
 		"Collection deleted",
 		"collection",
-		qd.cfg.DbBHLQuest)
+		qd.cfg.QdrantDb)
 
 	// Create new collection
 	var defaultSegmentNumber uint64 = qd.cfg.QdrantSegmentsNum
 	_, err = qd.clientC.Create(ctx, &pb.CreateCollection{
-		CollectionName: qd.cfg.DbBHLQuest,
+		CollectionName: qd.cfg.QdrantDb,
 		VectorsConfig: &pb.VectorsConfig{Config: &pb.VectorsConfig_Params{
 			Params: &pb.VectorParams{
 				Size:     qd.cfg.VectorSize,
@@ -43,7 +43,7 @@ func (qd *qdrant) init() error {
 	slog.Info(
 		"Collection created",
 		"collection",
-		qd.cfg.DbBHLQuest,
+		qd.cfg.QdrantDb,
 	)
 	return nil
 }
@@ -51,7 +51,7 @@ func (qd *qdrant) init() error {
 func (qd *qdrant) query(emb []float32) ([]text.Chunk, error) {
 	ctx := context.Background()
 	pts, err := qd.clientP.Search(ctx, &pb.SearchPoints{
-		CollectionName: qd.cfg.DbBHLQuest,
+		CollectionName: qd.cfg.QdrantDb,
 		Vector:         emb,
 		Limit:          25,
 		// Include all payload and vectors in the search result
@@ -122,7 +122,7 @@ func (qd *qdrant) upsertPoints(pts []*pb.PointStruct) error {
 	_, err = qd.clientP.Upsert(
 		ctx,
 		&pb.UpsertPoints{
-			CollectionName: qd.cfg.DbBHLQuest,
+			CollectionName: qd.cfg.QdrantDb,
 			Wait:           &waitUpsert,
 			Points:         pts,
 		},

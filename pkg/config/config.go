@@ -32,8 +32,8 @@ type Config struct {
 	// DbPass is the DbUser's password.
 	DbPass string
 
-	// DbBHLQuest is the database name where BHLquest keeps its data.
-	DbBHLQuest string
+	// QdrantDb is the database name where BHLquest keeps its data.
+	QdrantDb string
 
 	// DbBHLNames is the database where BHLnames keeps its data.
 	DbBHLNames string
@@ -128,9 +128,9 @@ func OptDbPass(s string) Option {
 	}
 }
 
-func OptDbBHLQuest(s string) Option {
+func OptQdrantDb(s string) Option {
 	return func(cfg *Config) {
-		cfg.DbBHLQuest = s
+		cfg.QdrantDb = s
 	}
 }
 
@@ -181,12 +181,12 @@ func New(opts ...Option) Config {
 		BHLDir:            "/opt/bhl/",
 		LlmUtilURL:        "http://0.0.0.0:8000/api/v1/",
 		QdrantHost:        "0.0.0.0:6334",
+		QdrantDb:          "bhlquest",
 		QdrantSegmentsNum: 2,
 		VectorSize:        768,
 		DbHost:            "0.0.0.0",
 		DbUser:            "postgres",
 		DbPass:            "postgres",
-		DbBHLQuest:        "bhlquest",
 		DbBHLNames:        "bhlnames",
 		Port:              8555,
 		ScoreThreshold:    0.4,

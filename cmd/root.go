@@ -50,12 +50,12 @@ type configData struct {
 	BHLDir            string
 	LlmUtilURL        string
 	QdrantHost        string
+	QdrantDB          string
 	QdrantSegmentsNum uint64
 	VectorSize        uint64
 	DbHost            string
 	DbUser            string
 	DbPass            string
-	DbBHLQuest        string
 	DbBHLNames        string
 	PortREST          int
 }
@@ -114,12 +114,12 @@ func initConfig() {
 	_ = viper.BindEnv("BHLDir", "BHLQ_BHL_DIR")
 	_ = viper.BindEnv("LlmUtilURL", "BHLQ_LLM_UTIL_URL")
 	_ = viper.BindEnv("QdrantHost", "BHLQ_QDRANT_HOST")
+	_ = viper.BindEnv("QdrantDb", "BHLQ_QDRANT_DB")
 	_ = viper.BindEnv("QdrantSegmentsNum", "BHLQ_QDRANT_SEGMENTS_NUM")
 	_ = viper.BindEnv("VectorSize", "BHLQ_VECTOR_SIZE")
 	_ = viper.BindEnv("DbHost", "BHLQ_DB_HOST")
 	_ = viper.BindEnv("DbUser", "BHLQ_DB_USER")
 	_ = viper.BindEnv("DbPass", "BHLQ_DB_PASS")
-	_ = viper.BindEnv("DbBHLQuest", "BHLQ_DB_BHL_QUEST")
 	_ = viper.BindEnv("DbBHLNames", "BHLQ_DB_BHL_NAMES")
 	_ = viper.BindEnv("Port", "BHLQ_PORT")
 	_ = viper.BindEnv("InitClasses", "BHLQ_INIT_CLASSES")
@@ -181,8 +181,8 @@ func getOpts() {
 	if cfgCli.DbPass != "" {
 		opts = append(opts, config.OptDbPass(cfgCli.DbPass))
 	}
-	if cfgCli.DbBHLQuest != "" {
-		opts = append(opts, config.OptDbBHLQuest(cfgCli.DbBHLQuest))
+	if cfgCli.QdrantDB != "" {
+		opts = append(opts, config.OptQdrantDb(cfgCli.QdrantDB))
 	}
 	if cfgCli.DbBHLNames != "" {
 		opts = append(opts, config.OptDbBHLNames(cfgCli.DbBHLNames))

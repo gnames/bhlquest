@@ -59,7 +59,7 @@ func New(
 func (qd *qdrant) Init() error {
 	msg := fmt.Sprintf(
 		"Resetting '%s' database at '%s'.",
-		qd.cfg.DbBHLQuest,
+		qd.cfg.QdrantDb,
 		qd.cfg.QdrantHost,
 	)
 	slog.Info(msg)
