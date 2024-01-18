@@ -68,12 +68,6 @@ const docTemplate = `{
                         "description": "A score threshold from 0.0 to 1.0",
                         "name": "score-threshold",
                         "in": "query"
-                    },
-                    {
-                        "type": "boolean",
-                        "description": "Shows matched text in results",
-                        "name": "with-text",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -241,11 +235,18 @@ const docTemplate = `{
                     "example": 2
                 },
                 "pages": {
-                    "description": "PageIDs is a list of IDs of pages in the Item.\nExample:\t[53469262, 53469263, 53469264, 53469265, 53469266]",
+                    "description": "PageIDs is a list of IDs of pages in the Item.",
                     "type": "array",
                     "items": {
                         "type": "integer"
-                    }
+                    },
+                    "example": [
+                        53469262,
+                        53469263,
+                        53469264,
+                        53469265,
+                        53469266
+                    ]
                 },
                 "reference": {
                     "description": "Reference is the string representation of the BHL reference.",

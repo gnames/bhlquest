@@ -39,7 +39,7 @@ func homeGET(bq bhlquest.BHLQuest) func(echo.Context) error {
 			Format:         "html",
 			FormatOptions:  []string{"html", "json"},
 			MaxResultsNum:  5,
-			ScoreThreshold: 0.4,
+			ScoreThreshold: 0.65,
 			Version:        bhlquest.GetVersion().Version,
 		}
 

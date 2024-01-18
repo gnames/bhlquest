@@ -5,6 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.14] - 2024-01-18 Thu
+
+- Clean up API
 
 ## [v0.0.13] - 2024-01-18 Thu
 

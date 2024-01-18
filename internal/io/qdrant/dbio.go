@@ -76,6 +76,9 @@ func (qd *qdrant) query(emb []float32) ([]text.Chunk, error) {
 			Embedding: v.Vectors.GetVector().GetData(),
 			Score:     float64(v.GetScore()),
 		}
+		if ch.Score < qd.cfg.ScoreThreshold {
+			continue
+		}
 		res = append(res, ch)
 	}
 
