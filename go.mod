@@ -2,12 +2,10 @@ module github.com/gnames/bhlquest
 
 go 1.21
 
-replace github.com/gnames/gnbhl => ../gnbhl
-
 require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/gnames/bhlnames v0.1.2
-	github.com/gnames/gnbhl v0.1.2
+	github.com/gnames/gnbhl v0.1.3
 	github.com/gnames/gnfmt v0.4.3
 	github.com/gnames/gnlib v0.31.0
 	github.com/gnames/gnsys v0.2.3

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [v0.0.12] - 2024-01-18 Thu
+
+- Fix: gnbhl reference
+
 ## [v0.0.11] - 2024-01-18 Thu
 
 - Improve chunks in result (#26)
