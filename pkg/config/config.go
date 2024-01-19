@@ -189,7 +189,7 @@ func New(opts ...Option) Config {
 		DbPass:            "postgres",
 		DbBHLNames:        "bhlnames",
 		Port:              8555,
-		ScoreThreshold:    0.65,
+		ScoreThreshold:    0.55,
 		MaxResultsNum:     5,
 		WithSummary:       true,
 		WithCrossEmbed:    false,
