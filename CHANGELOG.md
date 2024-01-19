@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.15] - 2024-01.18 Thu
+
+- Fix typo
+
 ## [v0.0.14] - 2024-01-18 Thu
 
 - Clean up API
