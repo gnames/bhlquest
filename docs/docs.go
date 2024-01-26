@@ -193,6 +193,21 @@ const docTemplate = `{
                 }
             }
         },
+        "output.Page": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID is the ID of the page.",
+                    "type": "integer",
+                    "example": 53469262
+                },
+                "pageSeq": {
+                    "description": "PageSeq is the sequence number of the page in the item.",
+                    "type": "integer",
+                    "example": 2
+                }
+            }
+        },
         "output.Result": {
             "description": "Result holds information about a BHL page or range of pages that contain answers to a given question.",
             "type": "object",
@@ -235,18 +250,11 @@ const docTemplate = `{
                     "example": 2
                 },
                 "pages": {
-                    "description": "PageIDs is a list of IDs of pages in the Item.",
+                    "description": "Page is a list of pages in the Item.",
                     "type": "array",
                     "items": {
-                        "type": "integer"
-                    },
-                    "example": [
-                        53469262,
-                        53469263,
-                        53469264,
-                        53469265,
-                        53469266
-                    ]
+                        "$ref": "#/definitions/output.Page"
+                    }
                 },
                 "reference": {
                     "description": "Reference is the string representation of the BHL reference.",
@@ -272,7 +280,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "bhlquest.globalnames.org",
+	Host:             "localhost:8555",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "BHLQuest API",

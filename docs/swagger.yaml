@@ -60,6 +60,17 @@ definitions:
         example: v0.0.3
         type: string
     type: object
+  output.Page:
+    properties:
+      id:
+        description: ID is the ID of the page.
+        example: 53469262
+        type: integer
+      pageSeq:
+        description: PageSeq is the sequence number of the page in the item.
+        example: 2
+        type: integer
+    type: object
   output.Result:
     description: Result holds information about a BHL page or range of pages that
       contain answers to a given question.
@@ -100,15 +111,9 @@ definitions:
         example: 2
         type: integer
       pages:
-        description: PageIDs is a list of IDs of pages in the Item.
-        example:
-        - 53469262
-        - 53469263
-        - 53469264
-        - 53469265
-        - 53469266
+        description: Page is a list of pages in the Item.
         items:
-          type: integer
+          $ref: '#/definitions/output.Page'
         type: array
       reference:
         description: Reference is the string representation of the BHL reference.
@@ -125,7 +130,7 @@ definitions:
           type: string
         type: array
     type: object
-host: bhlquest.globalnames.org
+host: localhost:8555
 info:
   contact:
     email: dmozzherin@gmail.com

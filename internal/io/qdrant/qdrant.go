@@ -144,8 +144,8 @@ func (qd *qdrant) Query(emb []float32) (output.Answer, error) {
 			ChunkID: chs[i].ID,
 			ItemID:  chs[i].ItemID,
 			PageID:  cnkBHL.Pages[0].ID,
-			PageIDs: gnlib.Map(itm.Pages(), func(p *pagebhl.PageBHL) uint {
-				return uint(p.ID)
+			Pages: gnlib.Map(itm.Pages(), func(p *pagebhl.PageBHL) output.Page {
+				return output.Page{ID: p.ID, PageSeq: p.SeqNum}
 			}),
 			PageIndex: cnkBHL.PageIdxStart,
 
