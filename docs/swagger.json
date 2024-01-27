@@ -14,7 +14,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8555",
+    "host": "bhlquest.globalnames.org",
     "basePath": "/api/v1",
     "paths": {
         "/": {
@@ -196,7 +196,7 @@
                     "example": 53469262
                 },
                 "pageSeq": {
-                    "description": "PageSeq is the sequence number of the page in the item.",
+                    "description": "PageNum is the sequence number of the page in the item.",
                     "type": "integer",
                     "example": 2
                 }

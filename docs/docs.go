@@ -202,7 +202,7 @@ const docTemplate = `{
                     "example": 53469262
                 },
                 "pageSeq": {
-                    "description": "PageSeq is the sequence number of the page in the item.",
+                    "description": "PageNum is the sequence number of the page in the item.",
                     "type": "integer",
                     "example": 2
                 }
@@ -280,7 +280,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8555",
+	Host:             "bhlquest.globalnames.org",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "BHLQuest API",

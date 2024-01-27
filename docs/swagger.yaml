@@ -67,7 +67,7 @@ definitions:
         example: 53469262
         type: integer
       pageSeq:
-        description: PageSeq is the sequence number of the page in the item.
+        description: PageNum is the sequence number of the page in the item.
         example: 2
         type: integer
     type: object
@@ -130,7 +130,7 @@ definitions:
           type: string
         type: array
     type: object
-host: localhost:8555
+host: bhlquest.globalnames.org
 info:
   contact:
     email: dmozzherin@gmail.com
