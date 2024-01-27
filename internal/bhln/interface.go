@@ -10,7 +10,7 @@ type BHLN interface {
 
 	// PageNums returns back a map of page ids to page numbers for a given
 	// BHL item.
-	PageNums(itemID uint) (map[uint]uint, error)
+	PageNums(itemID uint) (map[uint]string, error)
 
 	// ItemIds retuns back ids of BHL items that need to be embedded.
 	ItemIds(offset, limit int, taxa []string) ([]uint, error)

@@ -88,6 +88,7 @@ type Page struct {
 	// ID is the ID of the page.
 	ID uint `json:"id" example:"53469262"`
 
-	// PageNum is the sequence number of the page in the item.
-	PageNum uint `json:"pageNum" example:"2"`
+	// PageNum is the page number of the page in the item.
+	// If it is not given, no page number is available.
+	PageNum string `json:"pageNum" example:"2"`
 }

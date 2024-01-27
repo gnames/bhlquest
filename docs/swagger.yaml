@@ -67,9 +67,11 @@ definitions:
         example: 53469262
         type: integer
       pageNum:
-        description: PageNum is the sequence number of the page in the item.
-        example: 2
-        type: integer
+        description: |-
+          PageNum is the page number of the page in the item.
+          If it is not given, no page number is available.
+        example: "2"
+        type: string
     type: object
   output.Result:
     description: Result holds information about a BHL page or range of pages that

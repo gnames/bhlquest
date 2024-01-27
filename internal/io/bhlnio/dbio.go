@@ -2,7 +2,9 @@ package bhlnio
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
+	"strconv"
 
 	"github.com/gnames/bhlquest/internal/ent/ref"
 	"github.com/jackc/pgx/v5"
@@ -55,21 +57,26 @@ WHERE main_class = ANY($1::varchar[]) OR
 	return res, nil
 }
 
-func (bn *bhlnio) dbPages(itemID uint) (map[uint]uint, error) {
+func (bn *bhlnio) dbPages(itemID uint) (map[uint]string, error) {
 	q := `SELECT id, page_num FROM pages WHERE item_id = $1`
 	rows, err := bn.db.Query(context.Background(), q, itemID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	res := make(map[uint]uint)
+	res := make(map[uint]string)
 	for rows.Next() {
-		var id, pageNum uint
+		var id uint
+		var pageNum sql.NullInt32
 		err = rows.Scan(&id, &pageNum)
 		if err != nil {
 			return nil, err
 		}
-		res[id] = pageNum
+		if pageNum.Valid {
+			res[id] = strconv.Itoa(int(pageNum.Int32))
+		} else {
+			res[id] = ""
+		}
 	}
 	return res, nil
 }

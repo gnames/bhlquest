@@ -202,9 +202,9 @@ const docTemplate = `{
                     "example": 53469262
                 },
                 "pageNum": {
-                    "description": "PageNum is the sequence number of the page in the item.",
-                    "type": "integer",
-                    "example": 2
+                    "description": "PageNum is the page number of the page in the item.\nIf it is not given, no page number is available.",
+                    "type": "string",
+                    "example": "2"
                 }
             }
         },
