@@ -89,5 +89,5 @@ type Page struct {
 	ID uint `json:"id" example:"53469262"`
 
 	// PageNum is the sequence number of the page in the item.
-	PageNum uint `json:"pageSeq" example:"2"`
+	PageNum uint `json:"pageNum" example:"2"`
 }

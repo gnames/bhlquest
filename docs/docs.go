@@ -201,7 +201,7 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 53469262
                 },
-                "pageSeq": {
+                "pageNum": {
                     "description": "PageNum is the sequence number of the page in the item.",
                     "type": "integer",
                     "example": 2

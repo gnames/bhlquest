@@ -55,6 +55,25 @@ WHERE main_class = ANY($1::varchar[]) OR
 	return res, nil
 }
 
+func (bn *bhlnio) dbPages(itemID uint) (map[uint]uint, error) {
+	q := `SELECT id, page_num FROM pages WHERE item_id = $1`
+	rows, err := bn.db.Query(context.Background(), q, itemID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := make(map[uint]uint)
+	for rows.Next() {
+		var id, pageNum uint
+		err = rows.Scan(&id, &pageNum)
+		if err != nil {
+			return nil, err
+		}
+		res[id] = pageNum
+	}
+	return res, nil
+}
+
 func (bn *bhlnio) dbReference(pageIDs []int) (map[int]ref.Reference, error) {
 	res := make(map[int]ref.Reference)
 	q := `

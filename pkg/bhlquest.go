@@ -114,6 +114,11 @@ func (bq bhlquest) Ask(q string) (output.Answer, error) {
 		return res, err
 	}
 
+	results, err = bq.addPageNums(results)
+	if err != nil {
+		return res, err
+	}
+
 	results, err = bq.rnk.Rerank(q, results)
 	if err != nil {
 		return res, err
@@ -157,6 +162,26 @@ func GetVersion() gnvers.Version {
 		Build:   Build,
 	}
 	return version
+}
+
+func (bq bhlquest) addPageNums(
+	results []*output.Result,
+) ([]*output.Result, error) {
+	rs := results
+	for i := range rs {
+		pages, err := bq.bhln.PageNums(rs[i].ItemID)
+		if err != nil {
+			return nil, err
+		}
+
+		for j := range rs[i].Pages {
+			if pageNum, ok := pages[rs[i].Pages[j].ID]; ok {
+				rs[i].Pages[j].PageNum = pageNum
+			}
+		}
+
+	}
+	return rs, nil
 }
 
 // addReferences adds references to the results, it also tries to remove duplicates

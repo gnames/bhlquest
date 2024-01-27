@@ -36,6 +36,10 @@ func (bn *bhlnio) References(pages []int) (map[int]ref.Reference, error) {
 	return bn.dbReference(pages)
 }
 
+func (bn *bhlnio) PageNums(itemID uint) (map[uint]uint, error) {
+	return bn.dbPages(itemID)
+}
+
 func (bn *bhlnio) ItemIds(
 	offset, limit int,
 	taxa []string,
