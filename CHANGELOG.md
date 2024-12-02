@@ -5,7 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [ v0.0.19] - 2024-12-02 Mon
+## [v0.0.20] - 2024-12-02 Mon
+
+- Add orcid for jlpereira.
+
+## [v0.0.19] - 2024-12-02 Mon
 
 - Add citation.cff.
 
