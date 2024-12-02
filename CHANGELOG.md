@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [ v0.0.19] - 2024-12-02 Mon
+
+- Add citation.cff.
+
 ## [v0.0.15] - 2024-01.18 Thu
 
 - Fix typo
@@ -100,7 +104,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create database reset with `pgvector` for the data (#3).
 - Return list of item IDs (#2).
 
-
 ## [v0.0.0] - 2023-11-11
 
 ### Added v0.0.0
@@ -121,7 +124,6 @@ This document follows [changelog guidelines]
 [v0.0.2]: https://github.com/gnames/bhlquest/compare/v0.0.1...v0.0.2
 [v0.0.1]: https://github.com/gnames/bhlquest/compare/v0.0.0...v0.0.1
 [v0.0.0]: https://github.com/gnames/bhlquest/tree/v0.0.0
-
 [#30]: https://codeberg.org/dimus/madcow/issues/30
 [#29]: https://codeberg.org/dimus/madcow/issues/29
 [#28]: https://codeberg.org/dimus/madcow/issues/28
@@ -152,5 +154,4 @@ This document follows [changelog guidelines]
 [#3]: https://codeberg.org/dimus/madcow/issues/3
 [#2]: https://codeberg.org/dimus/madcow/issues/2
 [#1]: https://codeberg.org/dimus/madcow/issues/1
-
 [changelog guidelines]: https://keepachangelog.com/en/1.0.0/

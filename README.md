@@ -1,8 +1,10 @@
 # BHLquest
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1426141.svg)](https://doi.org/10.5281/zenodo.1426141)
+
 `BHLquest` is an AI application designed to query the content of
- the [Biodiversity Heritage Library]. The application is local and does
- not depend on external services.
+the [Biodiversity Heritage Library]. The application is local and does
+not depend on external services.
 
 ## Installation
 
@@ -31,16 +33,16 @@ make install
 
 1. Install Prerequisits and Create Database
 
-* Create `bhlnames` and `bhlquest` databases in PostgreSQL.
-* Download the [bhlnames database dump].
-* Restore the `bhlnames` database:
+- Create `bhlnames` and `bhlquest` databases in PostgreSQL.
+- Download the [bhlnames database dump].
+- Restore the `bhlnames` database:
 
 ```bash
 zstd -dc bhlnames-xxxx-xx-xx.zst|pg_restore -d bhlnames
 ```
 
-* Install the BHL text corpus.
-* Install [pgvector extension], which is necessary for storing vector data.
+- Install the BHL text corpus.
+- Install [pgvector extension], which is necessary for storing vector data.
 
 2. Initial Run
 
@@ -116,11 +118,18 @@ command from the project's root:
 openapi-generator generate -i ./docs/swagger.yaml -g ruby -o ~/tmp/bhlquest --additional-properties gemName=bhlquest
 ```
 
+## Contributors
+
+[Dmitry Mozzherin][dimus]
+
+[José Luis Pereira][jlpereira]
 
 [Biodiversity Heritage Library]: https://www.biodiversitylibrary.org/
 [llmutil documentation]: https://github.com/gnames/llmutil
 [pgvector extension]: https://github.com/pgvector/pgvector
-[bhlnames database dump]: http://opendata.globalnames.org/dumps/bhlnames-2023-11-15.zst 
+[bhlnames database dump]: http://opendata.globalnames.org/dumps/bhlnames-2023-11-15.zst
 [API description]: http://0.0.0.0:8555/apidoc/
 [`swag`]: https://github.com/swaggo/swag
 [`openapi-generator`]: https://github.com/OpenAPITools/openapi-generator
+[dimus]: https://github.com/dimus
+[jlpereira]: https://github.com/jlpereira
