@@ -1,6 +1,6 @@
 # BHLquest
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1426141.svg)](https://doi.org/10.5281/zenodo.1426141)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14261419.svg)](https://doi.org/10.5281/zenodo.14261419)
 
 `BHLquest` is an AI application designed to query the content of
 the [Biodiversity Heritage Library]. The application is local and does
