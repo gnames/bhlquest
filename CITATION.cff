@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: "BHLquest:  a tool to ask questions about species using Biodiversity Heritage Library Corpus"
-version: 0.0.19  # Update with your version
+version: 0.0.20
 authors:
   - family-names: "Mozzherin"
     given-names: "Dmitry"
